@@ -1,0 +1,10 @@
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\bin\Debug\RegGarrettSchedulingSoftware.exe.config
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\bin\Debug\RegGarrettSchedulingSoftware.exe
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\bin\Debug\RegGarrettSchedulingSoftware.pdb
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.csprojAssemblyReference.cache
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.Login.resources
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.Properties.Resources.resources
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.csproj.GenerateResource.cache
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.csproj.CoreCompileInputs.cache
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.exe
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.pdb
