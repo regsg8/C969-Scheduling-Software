@@ -29,12 +29,34 @@ namespace RegGarrettSchedulingSoftware
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.titleLabel = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // titleLabel
+            // 
+            this.titleLabel.AutoSize = true;
+            this.titleLabel.Location = new System.Drawing.Point(13, 13);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.Size = new System.Drawing.Size(105, 13);
+            this.titleLabel.TabIndex = 0;
+            this.titleLabel.Text = "Scheduling Software";
+            // 
+            // Dashboard
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.titleLabel);
+            this.Name = "Dashboard";
             this.Text = "Dashboard";
-        }
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dashboard_FormClosed);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
+        }
+        
         #endregion
+
+        private System.Windows.Forms.Label titleLabel;
     }
 }

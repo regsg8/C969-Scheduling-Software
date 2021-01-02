@@ -16,5 +16,12 @@ namespace RegGarrettSchedulingSoftware
         {
             InitializeComponent();
         }
+
+        private void Dashboard_FormClosed(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+
     }
 }

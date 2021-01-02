@@ -125,7 +125,6 @@ namespace RegGarrettSchedulingSoftware
         #endregion
 
         private System.Windows.Forms.Label titleLabel;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label passwordLabel;
         private System.Windows.Forms.Label usernameLabel;
         private System.Windows.Forms.TextBox usernameInput;

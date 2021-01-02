@@ -16,7 +16,9 @@ namespace RegGarrettSchedulingSoftware
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Login());
+            var login = new Login();
+            login.ShowDialog();
+            Application.Run();
         }
     }
 }

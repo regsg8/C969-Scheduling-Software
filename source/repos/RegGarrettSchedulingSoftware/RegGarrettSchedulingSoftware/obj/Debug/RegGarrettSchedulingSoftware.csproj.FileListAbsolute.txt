@@ -8,3 +8,4 @@ C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedul
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.csproj.CoreCompileInputs.cache
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.exe
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.pdb
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.Dashboard.resources

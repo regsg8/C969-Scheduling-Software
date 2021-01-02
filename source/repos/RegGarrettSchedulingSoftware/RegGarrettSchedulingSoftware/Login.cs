@@ -34,7 +34,10 @@ namespace RegGarrettSchedulingSoftware
         }
         private void loginButton_Click(object sender, EventArgs e)
         {
-            
+            this.Hide();
+            Dashboard dashboard = new Dashboard();
+            dashboard.ShowDialog();
+            this.Close();
         }
 
         // errorLabel.Text = wrongPassword;
