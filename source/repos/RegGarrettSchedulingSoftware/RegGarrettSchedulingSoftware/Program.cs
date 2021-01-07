@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace RegGarrettSchedulingSoftware
 {
     static class Program
-    {
+    { 
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

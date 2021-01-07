@@ -8,18 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
+using MySql.Data.MySqlClient;
 
 namespace RegGarrettSchedulingSoftware
 {
     public partial class Login : Form
     {
+        public string sqlString = "SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875";
+        private string wrongPassword = "Incorrect Username or Password.";
+        private string noUsername = "Please enter your username.";
+        private string noPassword = "Please enter your password.";
         public Login()
         {
             InitializeComponent();
             checkRegion();
         }
 
-        private string wrongPassword = "Incorrect Username or Password.";
         private void checkRegion()
         {
             RegionInfo regionInfo = new RegionInfo(CultureInfo.CurrentCulture.Name);
@@ -30,20 +34,40 @@ namespace RegGarrettSchedulingSoftware
                 passwordLabel.Text = "Пароль";
                 loginButton.Text = "Войти";
                 wrongPassword = "Неправильное имя пользователя или пароль.";
+                noPassword = "Пожалуйста, введите свой пароль.";
+                noUsername = "Пожалуйста, введите ваше имя пользователя.";
             }
         }
+
         private void loginButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            Dashboard dashboard = new Dashboard();
-            dashboard.ShowDialog();
-            this.Close();
+            if (usernameInput.Text == "") 
+            {
+                MessageBox.Show(noUsername);
+            }
+            else if (passwordInput.Text == "") 
+            {
+                MessageBox.Show(noPassword);
+            }
+            else {
+                MySqlConnection conn = new MySqlConnection(sqlString);
+                MySqlCommand login = new MySqlCommand($"SELECT COUNT(*) FROM user WHERE username='{usernameInput.Text}' AND password='{passwordInput.Text}'", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(login);
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+                if (dt.Rows[0][0].ToString() == "1")
+                {
+                    this.Close();
+                    Dashboard dashboard = new Dashboard();
+                    dashboard.ShowDialog();
+                }
+                else MessageBox.Show(wrongPassword);
+            }
         }
 
-        // errorLabel.Text = wrongPassword;
-        // Неправильное имя пользователя или пароль.
-        //Нет аккаунта?
-        //Регистрация
-        //Выход
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

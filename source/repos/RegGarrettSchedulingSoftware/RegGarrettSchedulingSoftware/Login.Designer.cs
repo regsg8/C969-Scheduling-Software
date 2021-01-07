@@ -36,6 +36,7 @@ namespace RegGarrettSchedulingSoftware
             this.passwordInput = new System.Windows.Forms.TextBox();
             this.loginButton = new System.Windows.Forms.Button();
             this.errorLabel = new System.Windows.Forms.Label();
+            this.exitButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -80,6 +81,7 @@ namespace RegGarrettSchedulingSoftware
             this.passwordInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.passwordInput.Location = new System.Drawing.Point(132, 100);
             this.passwordInput.Name = "passwordInput";
+            this.passwordInput.PasswordChar = '*';
             this.passwordInput.Size = new System.Drawing.Size(138, 20);
             this.passwordInput.TabIndex = 5;
             // 
@@ -103,11 +105,22 @@ namespace RegGarrettSchedulingSoftware
             this.errorLabel.TabIndex = 7;
             this.errorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // exitButton
+            // 
+            this.exitButton.Location = new System.Drawing.Point(132, 220);
+            this.exitButton.Name = "exitButton";
+            this.exitButton.Size = new System.Drawing.Size(138, 23);
+            this.exitButton.TabIndex = 8;
+            this.exitButton.Text = "Exit";
+            this.exitButton.UseVisualStyleBackColor = true;
+            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(373, 285);
+            this.Controls.Add(this.exitButton);
             this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.loginButton);
             this.Controls.Add(this.passwordInput);
@@ -131,6 +144,7 @@ namespace RegGarrettSchedulingSoftware
         private System.Windows.Forms.TextBox passwordInput;
         private System.Windows.Forms.Button loginButton;
         private System.Windows.Forms.Label errorLabel;
+        private System.Windows.Forms.Button exitButton;
     }
 }
 
