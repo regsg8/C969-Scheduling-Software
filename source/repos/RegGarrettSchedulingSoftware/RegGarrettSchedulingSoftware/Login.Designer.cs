@@ -35,16 +35,16 @@ namespace RegGarrettSchedulingSoftware
             this.usernameInput = new System.Windows.Forms.TextBox();
             this.passwordInput = new System.Windows.Forms.TextBox();
             this.loginButton = new System.Windows.Forms.Button();
-            this.errorLabel = new System.Windows.Forms.Label();
             this.exitButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // titleLabel
             // 
             this.titleLabel.AutoSize = true;
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.Location = new System.Drawing.Point(12, 9);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(105, 13);
+            this.titleLabel.Size = new System.Drawing.Size(175, 20);
             this.titleLabel.TabIndex = 0;
             this.titleLabel.Text = "Scheduling Software";
             // 
@@ -96,15 +96,6 @@ namespace RegGarrettSchedulingSoftware
             this.loginButton.UseVisualStyleBackColor = true;
             this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
             // 
-            // errorLabel
-            // 
-            this.errorLabel.ForeColor = System.Drawing.Color.Red;
-            this.errorLabel.Location = new System.Drawing.Point(12, 194);
-            this.errorLabel.Name = "errorLabel";
-            this.errorLabel.Size = new System.Drawing.Size(349, 23);
-            this.errorLabel.TabIndex = 7;
-            this.errorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // exitButton
             // 
             this.exitButton.Location = new System.Drawing.Point(132, 220);
@@ -121,7 +112,6 @@ namespace RegGarrettSchedulingSoftware
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(373, 285);
             this.Controls.Add(this.exitButton);
-            this.Controls.Add(this.errorLabel);
             this.Controls.Add(this.loginButton);
             this.Controls.Add(this.passwordInput);
             this.Controls.Add(this.usernameInput);
@@ -143,7 +133,6 @@ namespace RegGarrettSchedulingSoftware
         private System.Windows.Forms.TextBox usernameInput;
         private System.Windows.Forms.TextBox passwordInput;
         private System.Windows.Forms.Button loginButton;
-        private System.Windows.Forms.Label errorLabel;
         private System.Windows.Forms.Button exitButton;
     }
 }

@@ -14,7 +14,6 @@ namespace RegGarrettSchedulingSoftware
 {
     public partial class Login : Form
     {
-        public string sqlString = "SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875";
         private string wrongPassword = "Incorrect Username or Password.";
         private string noUsername = "Please enter your username.";
         private string noPassword = "Please enter your password.";
@@ -50,17 +49,12 @@ namespace RegGarrettSchedulingSoftware
                 MessageBox.Show(noPassword);
             }
             else {
-                MySqlConnection conn = new MySqlConnection(sqlString);
-                MySqlCommand login = new MySqlCommand($"SELECT COUNT(*) FROM user WHERE username='{usernameInput.Text}' AND password='{passwordInput.Text}'", conn);
-                MySqlDataAdapter sda = new MySqlDataAdapter(login);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                if (dt.Rows[0][0].ToString() == "1")
+                if (DB.login(usernameInput.Text.ToString(), passwordInput.Text.ToString()))
                 {
-                    this.Close();
+                    this.Hide();
                     Dashboard dashboard = new Dashboard();
                     dashboard.ShowDialog();
-                }
+                } 
                 else MessageBox.Show(wrongPassword);
             }
         }
