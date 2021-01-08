@@ -51,9 +51,9 @@ namespace RegGarrettSchedulingSoftware
             else {
                 if (DB.login(usernameInput.Text.ToString(), passwordInput.Text.ToString()))
                 {
-                    this.Hide();
                     Dashboard dashboard = new Dashboard();
-                    dashboard.ShowDialog();
+                    dashboard.Show();
+                    this.Close();
                 } 
                 else MessageBox.Show(wrongPassword);
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Data;
 
@@ -39,19 +40,34 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
-        public static void getAppts(string start, string end)
+        private static List<string> formatDates(DateTime start, DateTime end)
+        {
+            string startDate = start.ToString("yyyy'-'MM'-'dd HH:mm:ss"); 
+            string endDate = end.ToString("yyyy'-'MM'-'dd HH:mm:ss");
+            List<string> dates = new List<string>{ startDate, endDate };
+            return dates;
+        }
+
+        public static DataTable getAppts(DateTime start, DateTime end)
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
             try
             {
-                //MySqlCommand getAppt = new MySqlCommand($"SELECT * FROM appointment WHERE start BETWEEN {start} AND {end}", conn);
-                MySqlCommand getAppt = new MySqlCommand("SELECT * FROM appoinment");
+                MessageBox.Show("getAppts called");
+                List<string> formattedDates = formatDates(start, end);
+                
+                //MySqlCommand getAppt = new MySqlCommand($"SELECT * FROM appointment WHERE start BETWEEN {formattedDates[0]} AND {formattedDates[1]}", conn);
+                MySqlCommand getAppt = new MySqlCommand("SELECT * FROM appointment");
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
-                sda.Fill(table);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                return data;
             }
             catch (Exception x)
             {
                 Console.WriteLine("Error fetching appointments: " + x);
+                DataTable noData = new DataTable();
+                return noData;
             }
             finally
             {

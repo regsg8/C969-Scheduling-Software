@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
 
 namespace RegGarrettSchedulingSoftware
 {
@@ -14,15 +15,23 @@ namespace RegGarrettSchedulingSoftware
     {
         DateTime today;
         DateTime selection;
-        //public DataTable table = new DataTable();
+        DataTable appts = new DataTable();
         public Dashboard()
         {
             InitializeComponent();
             today = DateTime.Now;
-            dgv.DataSource = DB.table;
             checkAppts();
             populateWeek(today);
-            //MessageBox.Show(Convert.ToDateTime(today).ToString("yyyy-MM-dd HH:mm:ss"));
+            //formatDGV();
+        }
+
+        private void formatDGV()
+        {
+            dgv.DataSource = appts;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.RowHeadersVisible = false;
+            dgv.Columns["country"].Visible = false;
+            dgv.Columns["customerId"].Visible = false;
         }
 
         //give alert for appointments occuring within 15 min of login
@@ -45,7 +54,15 @@ namespace RegGarrettSchedulingSoftware
                 cal.AddBoldedDate(count.AddDays(i));
             }
             cal.UpdateBoldedDates();
-            DB.getAppts(start, end);
+            DateTime parsedStart = DateTime.Parse(start);
+            DateTime parsedEnd = DateTime.Parse(end);
+            //DB.getAppts(parsedStart, parsedEnd);
+            //MySqlConnection conn = new MySqlConnection("SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875");
+            //MySqlCommand getAppt = new MySqlCommand("SELECT * FROM appointment", conn);
+            //MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
+            //DataTable data = new DataTable();
+            //sda.Fill(data);
+            dgv.DataSource = DB.getAppts(parsedStart, parsedEnd);
         }
 
         //Display appoinments by selected month
