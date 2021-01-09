@@ -17,7 +17,7 @@ namespace RegGarrettSchedulingSoftware
         public static string login(string usr, string pwd)
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
-
+            conn.Open();
             try
             {
                 MySqlCommand verify = new MySqlCommand($"SELECT COUNT(*) FROM user WHERE username='{usr}' AND password='{pwd}'", conn);
@@ -77,14 +77,15 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
-        //Gets all appoinments for customer management
+        //Gets all customers for customer management
         public static DataTable getCustomers()
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
             try
             {
-                MySqlCommand getCust = new MySqlCommand($"SELECT * FROM customer", conn);
+                //MySqlCommand getCust = new MySqlCommand($"SELECT * FROM customer", conn);
+                MySqlCommand getCust = new MySqlCommand("SELECT c.customerId, c.customerName, a.phone, a.address, ci.city, co.country FROM customer AS c INNER JOIN address AS a ON c.addressId = a.addressId INNER JOIN city AS ci ON a.cityId = ci.cityId INNER JOIN country AS co ON ci.countryId = co.countryId", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getCust);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -92,7 +93,7 @@ namespace RegGarrettSchedulingSoftware
             }
             catch (Exception x)
             {
-                Console.WriteLine("Error fetching appointments: " + x);
+                Console.WriteLine("Error fetching customers: " + x);
                 DataTable noData = new DataTable();
                 return noData;
             }
