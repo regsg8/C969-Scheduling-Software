@@ -16,16 +16,19 @@ namespace RegGarrettSchedulingSoftware
         DateTime today;
         DateTime selection;
         DataTable currentData = new DataTable();
-        public Dashboard()
+        private string userID;
+        public Dashboard(string id)
         {
             InitializeComponent();
             today = DateTime.Now;
             selection = DateTime.Now;
+            userID = id;
             formatDGV();
             checkAppts();
             populateWeek(today);
         }
 
+        //Formats the apppointments DataGridView
         private void formatDGV()
         {
             dgv.ColumnCount = 4;
@@ -47,13 +50,13 @@ namespace RegGarrettSchedulingSoftware
             dgv.RowHeadersVisible = false;
         }
 
-        //give alert for appointments occuring within 15 min of login
+        //Gives alert if an appointment starts within 15 min of login
         private void checkAppts()
         {
             
         }
 
-        //Display appointments by selected week
+        //Displays appointments by selected week
         private void populateWeek(DateTime date)
         {
             cal.RemoveAllBoldedDates();
@@ -69,9 +72,10 @@ namespace RegGarrettSchedulingSoftware
             DateTime parsedStart = DateTime.Parse(start);
             DateTime parsedEnd = DateTime.Parse(end);
             dgv.DataSource = DB.getAppts(parsedStart, parsedEnd);
+            currentData = DB.getAppts(parsedStart, parsedEnd);
         }
 
-        //Display appointments by selected month
+        //Displays appointments by selected month
         private void populateMonth(DateTime date)
         {
             cal.RemoveAllBoldedDates();
@@ -88,6 +92,7 @@ namespace RegGarrettSchedulingSoftware
             DateTime parsedStart = DateTime.Parse(start);
             DateTime end = date.AddDays(days);
             dgv.DataSource = DB.getAppts(parsedStart, end);
+            currentData = DB.getAppts(parsedStart, end);
         }
 
 
@@ -97,7 +102,6 @@ namespace RegGarrettSchedulingSoftware
             {
                 populateWeek(selection);
             }
-            else populateWeek(today);
         }
 
         private void monthlyRadio_CheckedChanged(object sender, EventArgs e)
@@ -108,6 +112,7 @@ namespace RegGarrettSchedulingSoftware
             }   
         }
 
+        //Populates either weekly or monthly appointments based on radio selection
         private void cal_DateChanged(object sender, DateRangeEventArgs e)
         {
             selection = cal.SelectionRange.Start;
@@ -129,7 +134,7 @@ namespace RegGarrettSchedulingSoftware
 
         private void editAppt_Click(object sender, EventArgs e)
         {
-            //fetch selected appt and open modify appoinment form
+            //fetch selected appt and open modify appointment form
         }
 
         private void manageCust_Click(object sender, EventArgs e)
@@ -154,32 +159,3 @@ namespace RegGarrettSchedulingSoftware
         }
     }
 }
-
-//format dgv
-//grab all appts within timeframe
-//join customer name using appt cust id
-//bind data to datagridview
-
-
-//Test populating dgv with results
-//MySqlConnection conn = new MySqlConnection("SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875");
-//MySqlCommand getAppt = new MySqlCommand("SELECT * FROM appointment", conn);
-//MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
-//DataTable data = new DataTable();
-//sda.Fill(data);
-//dgv.DataSource = data;
-
-//Test populate sql join
-//MySqlConnection conn = new MySqlConnection("SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875");
-//MySqlCommand getAppt = new MySqlCommand("SELECT c.customerName, a.type, a.start, a.end, a.appointmentId FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId", conn);
-//MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
-//DataTable data = new DataTable();
-//sda.Fill(data);
-//currentData.Clear();
-//sda.Fill(currentData);
-//dgv.DataSource = data;
-//MessageBox.Show(currentData.Rows[0][4].ToString());
-
-
-//Not populating dgv:
-//dgv.DataSource = DB.getAppts(parsedStart, parsedEnd);

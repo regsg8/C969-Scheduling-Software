@@ -23,6 +23,7 @@ namespace RegGarrettSchedulingSoftware
             checkRegion();
         }
 
+        //Changes language to Russian if the user's format pertains to a Russian speaking region
         private void checkRegion()
         {
             RegionInfo regionInfo = new RegionInfo(CultureInfo.CurrentCulture.Name);
@@ -49,9 +50,10 @@ namespace RegGarrettSchedulingSoftware
                 MessageBox.Show(noPassword);
             }
             else {
-                if (DB.login(usernameInput.Text.ToString(), passwordInput.Text.ToString()))
+                string id = DB.login(usernameInput.Text.ToString(), passwordInput.Text.ToString());
+                if (id != "")
                 {
-                    Dashboard dashboard = new Dashboard();
+                    Dashboard dashboard = new Dashboard(id);
                     dashboard.Show();
                     this.Close();
                 } 
