@@ -12,7 +12,6 @@ namespace RegGarrettSchedulingSoftware
     class DB
     {
         public static string sqlString = "SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875";
-        public static DataTable table = new DataTable();
         public static bool login(string usr, string pwd)
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
@@ -51,13 +50,13 @@ namespace RegGarrettSchedulingSoftware
         public static DataTable getAppts(DateTime start, DateTime end)
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
             try
             {
-                MessageBox.Show("getAppts called");
                 List<string> formattedDates = formatDates(start, end);
-                
                 //MySqlCommand getAppt = new MySqlCommand($"SELECT * FROM appointment WHERE start BETWEEN {formattedDates[0]} AND {formattedDates[1]}", conn);
-                MySqlCommand getAppt = new MySqlCommand("SELECT * FROM appointment");
+                MySqlCommand getAppt = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end, a.appointmentId FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.start BETWEEN '{formattedDates[0]}' AND '{formattedDates[1]}'", conn);
+                //MySqlCommand getAppt = new MySqlCommand("SELECT * FROM appointment", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
                 DataTable data = new DataTable();
                 sda.Fill(data);

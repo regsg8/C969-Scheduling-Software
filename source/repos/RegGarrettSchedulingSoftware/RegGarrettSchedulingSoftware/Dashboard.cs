@@ -15,23 +15,36 @@ namespace RegGarrettSchedulingSoftware
     {
         DateTime today;
         DateTime selection;
-        DataTable appts = new DataTable();
+        DataTable currentData = new DataTable();
         public Dashboard()
         {
             InitializeComponent();
             today = DateTime.Now;
+            selection = DateTime.Now;
+            formatDGV();
             checkAppts();
             populateWeek(today);
-            //formatDGV();
         }
 
         private void formatDGV()
         {
-            dgv.DataSource = appts;
+            dgv.ColumnCount = 4;
+            foreach (DataGridViewColumn column in dgv.Columns) 
+            { 
+                column.Width = 150;
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            } 
+            dgv.Columns[0].HeaderText = "Customer";
+            dgv.Columns[0].DataPropertyName = "customerName";
+            dgv.Columns[1].HeaderText = "Type";
+            dgv.Columns[1].DataPropertyName = "type";
+            dgv.Columns[2].HeaderText = "Start";
+            dgv.Columns[2].DataPropertyName = "start";
+            dgv.Columns[3].HeaderText = "End";
+            dgv.Columns[3].DataPropertyName = "end";
+            dgv.AutoGenerateColumns = false;
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv.RowHeadersVisible = false;
-            dgv.Columns["country"].Visible = false;
-            dgv.Columns["customerId"].Visible = false;
         }
 
         //give alert for appointments occuring within 15 min of login
@@ -44,7 +57,6 @@ namespace RegGarrettSchedulingSoftware
         private void populateWeek(DateTime date)
         {
             cal.RemoveAllBoldedDates();
-            DB.table.Clear();
             int day = (int)date.DayOfWeek;
             string start = date.AddDays(-day).ToString();
             string end = date.AddDays(7 - day).ToString();
@@ -56,20 +68,13 @@ namespace RegGarrettSchedulingSoftware
             cal.UpdateBoldedDates();
             DateTime parsedStart = DateTime.Parse(start);
             DateTime parsedEnd = DateTime.Parse(end);
-            //DB.getAppts(parsedStart, parsedEnd);
-            //MySqlConnection conn = new MySqlConnection("SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875");
-            //MySqlCommand getAppt = new MySqlCommand("SELECT * FROM appointment", conn);
-            //MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
-            //DataTable data = new DataTable();
-            //sda.Fill(data);
             dgv.DataSource = DB.getAppts(parsedStart, parsedEnd);
         }
 
-        //Display appoinments by selected month
+        //Display appointments by selected month
         private void populateMonth(DateTime date)
         {
             cal.RemoveAllBoldedDates();
-            DB.table.Clear();
             string start = date.Month.ToString() + "/01/" + date.Year.ToString();
             int days = 31;
             if (date.Month == 2) days = 29;
@@ -80,18 +85,27 @@ namespace RegGarrettSchedulingSoftware
                 cal.AddBoldedDate(count.AddDays(i));
             }
             cal.UpdateBoldedDates();
+            DateTime parsedStart = DateTime.Parse(start);
+            DateTime end = date.AddDays(days);
+            dgv.DataSource = DB.getAppts(parsedStart, end);
         }
 
 
         private void weeklyRadio_CheckedChanged(object sender, EventArgs e)
         {
-
-            populateWeek(selection);
+            if (weeklyRadio.Checked)
+            {
+                populateWeek(selection);
+            }
+            else populateWeek(today);
         }
 
         private void monthlyRadio_CheckedChanged(object sender, EventArgs e)
         {
-            populateMonth(selection);
+            if (monthlyRadio.Checked)
+            {
+                populateMonth(selection);
+            }   
         }
 
         private void cal_DateChanged(object sender, DateRangeEventArgs e)
@@ -124,6 +138,11 @@ namespace RegGarrettSchedulingSoftware
             custMan.ShowDialog();
         }
 
+        private void lookUpCustomer_Click(object sender, EventArgs e)
+        {
+            //Pulls up customer by selected id
+        }
+
         private void exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -135,3 +154,32 @@ namespace RegGarrettSchedulingSoftware
         }
     }
 }
+
+//format dgv
+//grab all appts within timeframe
+//join customer name using appt cust id
+//bind data to datagridview
+
+
+//Test populating dgv with results
+//MySqlConnection conn = new MySqlConnection("SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875");
+//MySqlCommand getAppt = new MySqlCommand("SELECT * FROM appointment", conn);
+//MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
+//DataTable data = new DataTable();
+//sda.Fill(data);
+//dgv.DataSource = data;
+
+//Test populate sql join
+//MySqlConnection conn = new MySqlConnection("SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875");
+//MySqlCommand getAppt = new MySqlCommand("SELECT c.customerName, a.type, a.start, a.end, a.appointmentId FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId", conn);
+//MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
+//DataTable data = new DataTable();
+//sda.Fill(data);
+//currentData.Clear();
+//sda.Fill(currentData);
+//dgv.DataSource = data;
+//MessageBox.Show(currentData.Rows[0][4].ToString());
+
+
+//Not populating dgv:
+//dgv.DataSource = DB.getAppts(parsedStart, parsedEnd);

@@ -38,6 +38,7 @@ namespace RegGarrettSchedulingSoftware
             this.editAppt = new System.Windows.Forms.Button();
             this.exit = new System.Windows.Forms.Button();
             this.manageCust = new System.Windows.Forms.Button();
+            this.lookUpCustomer = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,11 +88,13 @@ namespace RegGarrettSchedulingSoftware
             // 
             this.dgv.AllowUserToAddRows = false;
             this.dgv.AllowUserToDeleteRows = false;
+            this.dgv.AllowUserToResizeColumns = false;
+            this.dgv.AllowUserToResizeRows = false;
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv.Location = new System.Drawing.Point(308, 81);
             this.dgv.Name = "dgv";
             this.dgv.ReadOnly = true;
-            this.dgv.Size = new System.Drawing.Size(608, 331);
+            this.dgv.Size = new System.Drawing.Size(603, 331);
             this.dgv.TabIndex = 4;
             // 
             // addAppt
@@ -106,7 +109,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             // editAppt
             // 
-            this.editAppt.Location = new System.Drawing.Point(16, 284);
+            this.editAppt.Location = new System.Drawing.Point(308, 418);
             this.editAppt.Name = "editAppt";
             this.editAppt.Size = new System.Drawing.Size(227, 23);
             this.editAppt.TabIndex = 6;
@@ -116,7 +119,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             // exit
             // 
-            this.exit.Location = new System.Drawing.Point(18, 389);
+            this.exit.Location = new System.Drawing.Point(16, 448);
             this.exit.Name = "exit";
             this.exit.Size = new System.Drawing.Size(227, 23);
             this.exit.TabIndex = 7;
@@ -126,7 +129,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             // manageCust
             // 
-            this.manageCust.Location = new System.Drawing.Point(16, 313);
+            this.manageCust.Location = new System.Drawing.Point(16, 389);
             this.manageCust.Name = "manageCust";
             this.manageCust.Size = new System.Drawing.Size(227, 23);
             this.manageCust.TabIndex = 8;
@@ -134,11 +137,22 @@ namespace RegGarrettSchedulingSoftware
             this.manageCust.UseVisualStyleBackColor = true;
             this.manageCust.Click += new System.EventHandler(this.manageCust_Click);
             // 
+            // lookUpCustomer
+            // 
+            this.lookUpCustomer.Location = new System.Drawing.Point(541, 418);
+            this.lookUpCustomer.Name = "lookUpCustomer";
+            this.lookUpCustomer.Size = new System.Drawing.Size(225, 23);
+            this.lookUpCustomer.TabIndex = 9;
+            this.lookUpCustomer.Text = "Look Up Customer";
+            this.lookUpCustomer.UseVisualStyleBackColor = true;
+            this.lookUpCustomer.Click += new System.EventHandler(this.lookUpCustomer_Click);
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(951, 483);
+            this.Controls.Add(this.lookUpCustomer);
             this.Controls.Add(this.manageCust);
             this.Controls.Add(this.exit);
             this.Controls.Add(this.editAppt);
@@ -168,5 +182,6 @@ namespace RegGarrettSchedulingSoftware
         private System.Windows.Forms.Button editAppt;
         private System.Windows.Forms.Button exit;
         private System.Windows.Forms.Button manageCust;
+        private System.Windows.Forms.Button lookUpCustomer;
     }
 }
