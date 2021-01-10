@@ -44,9 +44,9 @@ namespace RegGarrettSchedulingSoftware
             this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.Location = new System.Drawing.Point(12, 9);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(175, 20);
+            this.titleLabel.Size = new System.Drawing.Size(53, 20);
             this.titleLabel.TabIndex = 0;
-            this.titleLabel.Text = "Scheduling Software";
+            this.titleLabel.Text = "Login";
             // 
             // passwordLabel
             // 
@@ -119,7 +119,7 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.titleLabel);
             this.Name = "Login";
-            this.Text = "Login";
+            this.Text = "Scheduling Software";
             this.ResumeLayout(false);
             this.PerformLayout();
 

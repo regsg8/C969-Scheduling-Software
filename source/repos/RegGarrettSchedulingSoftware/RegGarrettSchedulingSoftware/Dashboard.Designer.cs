@@ -48,9 +48,9 @@ namespace RegGarrettSchedulingSoftware
             this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.Location = new System.Drawing.Point(12, 9);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(175, 20);
+            this.titleLabel.Size = new System.Drawing.Size(97, 20);
             this.titleLabel.TabIndex = 0;
-            this.titleLabel.Text = "Scheduling Software";
+            this.titleLabel.Text = "Dashboard";
             // 
             // cal
             // 
@@ -163,7 +163,7 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.cal);
             this.Controls.Add(this.titleLabel);
             this.Name = "Dashboard";
-            this.Text = "Dashboard";
+            this.Text = "Schedule Software";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dashboard_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.ResumeLayout(false);

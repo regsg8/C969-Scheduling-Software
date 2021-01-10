@@ -45,7 +45,8 @@ namespace RegGarrettSchedulingSoftware
         }
         private void addCustomer_Click(object sender, EventArgs e)
         {
-
+            AddCustomer add = new AddCustomer();
+            add.ShowDialog();
         }
 
         private void editCustomer_Click(object sender, EventArgs e)
