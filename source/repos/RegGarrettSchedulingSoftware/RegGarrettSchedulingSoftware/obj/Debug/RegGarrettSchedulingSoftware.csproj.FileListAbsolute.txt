@@ -31,3 +31,4 @@ C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedul
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.csproj.CopyComplete
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.CustomerManagement.resources
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.AddCustomer.resources
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.ModifyCustomer.resources

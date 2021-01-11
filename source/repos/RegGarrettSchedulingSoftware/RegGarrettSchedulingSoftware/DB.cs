@@ -51,6 +51,13 @@ namespace RegGarrettSchedulingSoftware
             return dates;
         }
 
+        //Converts one date to MySql date format
+        private static string formatDate(DateTime date)
+        {
+            string formattedDate = date.ToString("yyyy'-'MM'-'dd HH:mm:ss");
+            return formattedDate;
+        }
+
         //Returns all appointments between given date ranges as a DataTable
         public static DataTable getAppts(DateTime start, DateTime end)
         {
@@ -102,6 +109,40 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
+        //Gets one customer by id
+        public static DataTable getOneCustomer(int id)
+        {
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand getCust = new MySqlCommand($"SELECT c.customerName, a.phone, a.address, ci.city, co.country, a.postalCode FROM customer AS c INNER JOIN address AS a ON c.addressId = a.addressId INNER JOIN city AS ci ON a.cityId = ci.cityId INNER JOIN country AS co ON ci.countryId = co.countryId AND c.customerId = {id}", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(getCust);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                return data;
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error fetching customer: " + x.Message);
+                DataTable noData = new DataTable();
+                return noData;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        //Updates one customer by id
+        public static void updateCustomer(int id, string name, string phone, string address, string city, string country, string zip)
+        {
+            //check if address needs to update, check for string "no change"
+            //if "no change" is not present on any item, then add a string to update that field
+
+            //
+        }
+
         //Check if country is in db, if not insert new country, return countryId
         private static int getCountryId(string country)
         {
@@ -110,13 +151,13 @@ namespace RegGarrettSchedulingSoftware
             try
             {
                 int countryId;
-                MySqlCommand checkCountry = new MySqlCommand($"SELECT countryId FROM country WHERE country = {country}", conn);
+                MySqlCommand checkCountry = new MySqlCommand($"SELECT countryId FROM country WHERE country = '{country}'", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(checkCountry);
                 DataTable data = new DataTable();
                 sda.Fill(data);
                 if (data.Rows.Count != 1)
                 {
-                    MySqlCommand insertCountry = new MySqlCommand($"INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ({country}, {DateTime.Now}, {Dashboard.userName}, {DateTime.Now}, {Dashboard.userName})", conn);
+                    MySqlCommand insertCountry = new MySqlCommand($"INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{country}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}')", conn);
                     insertCountry.ExecuteNonQuery();
                     //check
                     MessageBox.Show("Inserted country Id: " + insertCountry.LastInsertedId.ToString());
@@ -150,13 +191,13 @@ namespace RegGarrettSchedulingSoftware
             try
             {
                 int cityId;
-                MySqlCommand checkCity = new MySqlCommand($"SELECT cityId FROM city WHERE 'city' = {city}", conn);
+                MySqlCommand checkCity = new MySqlCommand($"SELECT cityId FROM city WHERE city = '{city}'", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(checkCity);
                 DataTable data = new DataTable();
                 sda.Fill(data);
                 if (data.Rows.Count != 1)
                 {
-                    MySqlCommand insertCity = new MySqlCommand($"INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ({city}, {countryId}, {DateTime.Now}, {Dashboard.userName}, {DateTime.Now}, {Dashboard.userName})", conn);
+                    MySqlCommand insertCity = new MySqlCommand($"INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{city}', '{countryId}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}')", conn);
                     insertCity.ExecuteNonQuery();
                     //check
                     MessageBox.Show("Inserted city Id: " + insertCity.LastInsertedId.ToString());
@@ -190,7 +231,7 @@ namespace RegGarrettSchedulingSoftware
             try
             {
                 int addressId;
-                MySqlCommand insertAddress = new MySqlCommand($"INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ({address}, 'not needed', {cityId}, {phone}, {DateTime.Now}, {Dashboard.userName}, {DateTime.Now}, {Dashboard.userName})", conn);
+                MySqlCommand insertAddress = new MySqlCommand($"INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{address}', 'not needed', '{cityId}', '{zip}', '{phone}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}')", conn);
                 insertAddress.ExecuteNonQuery();
                 //check
                 MessageBox.Show("Inserted address Id: " + insertAddress.LastInsertedId.ToString());
@@ -230,7 +271,7 @@ namespace RegGarrettSchedulingSoftware
                 //Insert new customer with name and addressId
                 MySqlConnection conn = new MySqlConnection(sqlString);
                 conn.Open();
-                MySqlCommand insertCust = new MySqlCommand($"INSERT INTO customer (customerName, addressId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ({name}, {addressId}, {DateTime.Now}, {Dashboard.userName}, {DateTime.Now}, {Dashboard.userName})", conn);
+                MySqlCommand insertCust = new MySqlCommand($"INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{name}', '{addressId}', '1', '{formatDate(DateTime.Now)}', '{Dashboard.userName}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}')", conn);
                 insertCust.ExecuteNonQuery();
                 MessageBox.Show($"{name} added!");
             }

@@ -23,12 +23,16 @@ namespace RegGarrettSchedulingSoftware
             //inputPanel textbox children?
             string name = firstInput.Text.ToString() + " " + lastInput.Text.ToString();
             DB.addNewCustomer(name, phoneInput.Text.ToString(), addressInput.Text.ToString(), cityInput.Text.ToString(), countryInput.Text.ToString(), zipInput.Text.ToString());
-            this.Close();
+            this.Hide();
+            CustomerManagement custMan = new CustomerManagement();
+            custMan.ShowDialog();
         }
 
         private void cancelCustomer_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
+            CustomerManagement custMan = new CustomerManagement();
+            custMan.ShowDialog();
         }
     }
 }

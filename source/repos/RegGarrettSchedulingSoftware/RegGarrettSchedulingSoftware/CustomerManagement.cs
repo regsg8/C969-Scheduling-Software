@@ -25,7 +25,9 @@ namespace RegGarrettSchedulingSoftware
             foreach (DataGridViewColumn column in dgv.Columns)
             {
                 column.Width = 150;
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+
             dgv.Columns[0].Width = 100;
             dgv.Columns[0].HeaderText = "ID";
             dgv.Columns[0].DataPropertyName = "customerId";
@@ -47,13 +49,19 @@ namespace RegGarrettSchedulingSoftware
         }
         private void addCustomer_Click(object sender, EventArgs e)
         {
+            this.Hide();
             AddCustomer add = new AddCustomer();
             add.ShowDialog();
         }
 
+        //Opens Modify Customer dialog with selected customer's ID
         private void editCustomer_Click(object sender, EventArgs e)
         {
-
+            this.Hide();
+            int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
+            MessageBox.Show(id.ToString());
+            ModifyCustomer modify = new ModifyCustomer(id);
+            modify.Show();
         }
 
         private void deleteCustomer_Click(object sender, EventArgs e)
