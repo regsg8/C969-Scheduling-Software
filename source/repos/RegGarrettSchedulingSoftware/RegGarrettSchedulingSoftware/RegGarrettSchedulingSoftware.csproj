@@ -106,6 +106,9 @@
     <Compile Include="Reporting.Designer.cs">
       <DependentUpon>Reporting.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AddCustomer.resx">
+      <DependentUpon>AddCustomer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CustomerManagement.resx">
       <DependentUpon>CustomerManagement.cs</DependentUpon>
     </EmbeddedResource>

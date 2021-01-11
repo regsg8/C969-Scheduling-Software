@@ -16,13 +16,15 @@ namespace RegGarrettSchedulingSoftware
         DateTime today;
         DateTime selection;
         DataTable currentData = new DataTable();
-        private string userID;
-        public Dashboard(string id)
+        public static string userID;
+        public static string userName;
+        public Dashboard(string id, string username)
         {
             InitializeComponent();
             today = DateTime.Now;
             selection = DateTime.Now;
             userID = id;
+            userName = username;
             formatDGV();
             checkAppts();
             populateWeek(today);

@@ -53,7 +53,7 @@ namespace RegGarrettSchedulingSoftware
                 string id = DB.login(usernameInput.Text.ToString(), passwordInput.Text.ToString());
                 if (id != "")
                 {
-                    Dashboard dashboard = new Dashboard(id);
+                    Dashboard dashboard = new Dashboard(id, usernameInput.Text.ToString());
                     dashboard.Show();
                     this.Close();
                 } 

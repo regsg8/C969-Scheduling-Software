@@ -12,6 +12,7 @@ namespace RegGarrettSchedulingSoftware
 {
     public partial class CustomerManagement : Form
     {
+        DataTable currentData;
         public CustomerManagement()
         {
             InitializeComponent();
@@ -42,6 +43,7 @@ namespace RegGarrettSchedulingSoftware
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv.RowHeadersVisible = false;
             dgv.DataSource = DB.getCustomers();
+            currentData = DB.getCustomers();
         }
         private void addCustomer_Click(object sender, EventArgs e)
         {
