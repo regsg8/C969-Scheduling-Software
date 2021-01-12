@@ -96,6 +96,8 @@ namespace RegGarrettSchedulingSoftware
             this.dgv.ReadOnly = true;
             this.dgv.Size = new System.Drawing.Size(603, 331);
             this.dgv.TabIndex = 4;
+            this.dgv.AutoGenerateColumns = false;
+            this.dgv.RowHeadersVisible = false;
             // 
             // addAppt
             // 

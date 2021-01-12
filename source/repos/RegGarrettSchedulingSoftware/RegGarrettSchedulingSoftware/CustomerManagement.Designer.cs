@@ -50,6 +50,8 @@ namespace RegGarrettSchedulingSoftware
             this.dgv.ReadOnly = true;
             this.dgv.Size = new System.Drawing.Size(853, 266);
             this.dgv.TabIndex = 0;
+            this.dgv.AutoGenerateColumns = false;
+            this.dgv.RowHeadersVisible = false;
             // 
             // titleLabel
             // 

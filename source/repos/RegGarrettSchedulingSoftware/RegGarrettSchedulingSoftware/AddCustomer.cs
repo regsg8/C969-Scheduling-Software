@@ -12,9 +12,11 @@ namespace RegGarrettSchedulingSoftware
 {
     public partial class AddCustomer : Form
     {
-        public AddCustomer()
+        private CustomerManagement customerM;
+        public AddCustomer(CustomerManagement form)
         {
             InitializeComponent();
+            customerM = form;
         }
 
         private void addButton_Click(object sender, EventArgs e)
@@ -23,16 +25,17 @@ namespace RegGarrettSchedulingSoftware
             //inputPanel textbox children?
             string name = firstInput.Text.ToString() + " " + lastInput.Text.ToString();
             DB.addNewCustomer(name, phoneInput.Text.ToString(), addressInput.Text.ToString(), cityInput.Text.ToString(), countryInput.Text.ToString(), zipInput.Text.ToString());
-            this.Hide();
-            CustomerManagement custMan = new CustomerManagement();
-            custMan.ShowDialog();
+            customerM.refreshDGV();
+            this.Close();
         }
 
         private void cancelCustomer_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            CustomerManagement custMan = new CustomerManagement();
-            custMan.ShowDialog();
+            this.Close();
+        }
+        private void AddCustomer_FormClosed(object sender, EventArgs e)
+        {
+            
         }
     }
 }

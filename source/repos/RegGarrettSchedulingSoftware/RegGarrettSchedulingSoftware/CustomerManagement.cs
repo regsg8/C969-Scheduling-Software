@@ -24,10 +24,9 @@ namespace RegGarrettSchedulingSoftware
             dgv.ColumnCount = 6;
             foreach (DataGridViewColumn column in dgv.Columns)
             {
-                column.Width = 150;
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                //Uses lambda to shorten syntax of applying common formats to all columns
+                Dashboard.format(column);
             }
-
             dgv.Columns[0].Width = 100;
             dgv.Columns[0].HeaderText = "ID";
             dgv.Columns[0].DataPropertyName = "customerId";
@@ -41,16 +40,19 @@ namespace RegGarrettSchedulingSoftware
             dgv.Columns[4].DataPropertyName = "city";
             dgv.Columns[5].HeaderText = "Country";
             dgv.Columns[5].DataPropertyName = "country";
-            dgv.AutoGenerateColumns = false;
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv.RowHeadersVisible = false;
+            dgv.DataSource = DB.getCustomers();
+            currentData = DB.getCustomers();
+        }
+
+        public void refreshDGV()
+        {
             dgv.DataSource = DB.getCustomers();
             currentData = DB.getCustomers();
         }
         private void addCustomer_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            AddCustomer add = new AddCustomer();
+            AddCustomer add = new AddCustomer(this);
             add.ShowDialog();
         }
 
@@ -59,7 +61,6 @@ namespace RegGarrettSchedulingSoftware
         {
             this.Hide();
             int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
-            MessageBox.Show(id.ToString());
             ModifyCustomer modify = new ModifyCustomer(id);
             modify.Show();
         }

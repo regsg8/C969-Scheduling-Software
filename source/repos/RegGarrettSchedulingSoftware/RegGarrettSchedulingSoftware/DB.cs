@@ -42,31 +42,28 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
-        //Converts DateTime to MySql date format
-        private static List<string> formatDates(DateTime start, DateTime end)
+        //Uses lambda to format any number of DateTime items into MySql format and returns them in a list of strings
+        private static List<string> formatDates(List<DateTime> dates)
         {
-            string startDate = start.ToString("yyyy'-'MM'-'dd HH:mm:ss"); 
-            string endDate = end.ToString("yyyy'-'MM'-'dd HH:mm:ss");
-            List<string> dates = new List<string>{ startDate, endDate };
-            return dates;
+            List<string> formatted = new List<string>();
+            dates.ForEach(d => 
+                                {
+                                    string s = d.ToString("yyyy'-'MM'-'dd HH:mm:ss");
+                                    formatted.Add(s);
+                                }
+            );
+            return formatted;
         }
 
-        //Converts one date to MySql date format
-        private static string formatDate(DateTime date)
-        {
-            string formattedDate = date.ToString("yyyy'-'MM'-'dd HH:mm:ss");
-            return formattedDate;
-        }
-
-        //Returns all appointments between given date ranges as a DataTable
-        public static DataTable getAppts(DateTime start, DateTime end)
+        //Returns all appointments between given date range
+        public static DataTable getAppts(List<DateTime> dates)
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
             try
             {
-                List<string> formattedDates = formatDates(start, end);
-                MySqlCommand getAppt = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end, a.appointmentId FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.start BETWEEN '{formattedDates[0]}' AND '{formattedDates[1]}'", conn);
+                List<string> formattedDates = formatDates(dates);
+                MySqlCommand getAppt = new MySqlCommand($"SELECT c.customerId, c.customerName, a.type, a.start, a.end, a.appointmentId FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.start BETWEEN '{formattedDates[0]}' AND '{formattedDates[1]}'", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -148,6 +145,8 @@ namespace RegGarrettSchedulingSoftware
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
+            List<DateTime> now = new List<DateTime> { DateTime.Now };
+            List<string> sqlDate = formatDates(now);
             try
             {
                 int countryId;
@@ -157,7 +156,7 @@ namespace RegGarrettSchedulingSoftware
                 sda.Fill(data);
                 if (data.Rows.Count != 1)
                 {
-                    MySqlCommand insertCountry = new MySqlCommand($"INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{country}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}')", conn);
+                    MySqlCommand insertCountry = new MySqlCommand($"INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{country}', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
                     insertCountry.ExecuteNonQuery();
                     //check
                     MessageBox.Show("Inserted country Id: " + insertCountry.LastInsertedId.ToString());
@@ -188,6 +187,8 @@ namespace RegGarrettSchedulingSoftware
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
+            List<DateTime> now = new List<DateTime> { DateTime.Now };
+            List<string> sqlDate = formatDates(now);
             try
             {
                 int cityId;
@@ -197,7 +198,7 @@ namespace RegGarrettSchedulingSoftware
                 sda.Fill(data);
                 if (data.Rows.Count != 1)
                 {
-                    MySqlCommand insertCity = new MySqlCommand($"INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{city}', '{countryId}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}')", conn);
+                    MySqlCommand insertCity = new MySqlCommand($"INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{city}', '{countryId}', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
                     insertCity.ExecuteNonQuery();
                     //check
                     MessageBox.Show("Inserted city Id: " + insertCity.LastInsertedId.ToString());
@@ -228,10 +229,12 @@ namespace RegGarrettSchedulingSoftware
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
+            List<DateTime> now = new List<DateTime> { DateTime.Now };
+            List<string> sqlDate = formatDates(now);
             try
             {
                 int addressId;
-                MySqlCommand insertAddress = new MySqlCommand($"INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{address}', 'not needed', '{cityId}', '{zip}', '{phone}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}')", conn);
+                MySqlCommand insertAddress = new MySqlCommand($"INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{address}', 'not needed', '{cityId}', '{zip}', '{phone}', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
                 insertAddress.ExecuteNonQuery();
                 //check
                 MessageBox.Show("Inserted address Id: " + insertAddress.LastInsertedId.ToString());
@@ -252,10 +255,10 @@ namespace RegGarrettSchedulingSoftware
 
         public static void addNewCustomer(string name, string phone, string address, string city, string country, string zip)
         {
+            List<DateTime> now = new List<DateTime> { DateTime.Now };
+            List<string> sqlDate = formatDates(now);
             try
             {
-                //Ask Tom about Lambda's too
-
                 //Check if country is in db, if not insert new country, return countryId
                 int countryId = getCountryId(country);
                 if (countryId == 0) throw new Exception("No Country ID");
@@ -271,7 +274,7 @@ namespace RegGarrettSchedulingSoftware
                 //Insert new customer with name and addressId
                 MySqlConnection conn = new MySqlConnection(sqlString);
                 conn.Open();
-                MySqlCommand insertCust = new MySqlCommand($"INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{name}', '{addressId}', '1', '{formatDate(DateTime.Now)}', '{Dashboard.userName}', '{formatDate(DateTime.Now)}', '{Dashboard.userName}')", conn);
+                MySqlCommand insertCust = new MySqlCommand($"INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{name}', '{addressId}', '1', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
                 insertCust.ExecuteNonQuery();
                 MessageBox.Show($"{name} added!");
             }

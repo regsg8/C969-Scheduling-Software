@@ -18,6 +18,14 @@ namespace RegGarrettSchedulingSoftware
         DataTable currentData = new DataTable();
         public static string userID;
         public static string userName;
+        //Sets up lambda to apply DRY principle for formatting Columns in multiple DataGridViews
+        public delegate void Format(DataGridViewColumn c);
+        public static Format format = (c) =>
+        {
+            c.Width = 150;
+            c.SortMode = DataGridViewColumnSortMode.NotSortable;
+        };
+
         public Dashboard(string id, string username)
         {
             InitializeComponent();
@@ -35,10 +43,10 @@ namespace RegGarrettSchedulingSoftware
         {
             dgv.ColumnCount = 4;
             foreach (DataGridViewColumn column in dgv.Columns) 
-            { 
-                column.Width = 150;
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
-            } 
+            {
+                //Uses lambda to shorten syntax of applying common formats to all columns
+                format(column);
+            }
             dgv.Columns[0].HeaderText = "Customer";
             dgv.Columns[0].DataPropertyName = "customerName";
             dgv.Columns[1].HeaderText = "Type";
@@ -47,9 +55,7 @@ namespace RegGarrettSchedulingSoftware
             dgv.Columns[2].DataPropertyName = "start";
             dgv.Columns[3].HeaderText = "End";
             dgv.Columns[3].DataPropertyName = "end";
-            dgv.AutoGenerateColumns = false;
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgv.RowHeadersVisible = false;
         }
 
         //Gives alert if an appointment starts within 15 min of login
@@ -73,8 +79,9 @@ namespace RegGarrettSchedulingSoftware
             cal.UpdateBoldedDates();
             DateTime parsedStart = DateTime.Parse(start);
             DateTime parsedEnd = DateTime.Parse(end);
-            dgv.DataSource = DB.getAppts(parsedStart, parsedEnd);
-            currentData = DB.getAppts(parsedStart, parsedEnd);
+            List<DateTime> dates = new List<DateTime> { parsedStart, parsedEnd };
+            dgv.DataSource = DB.getAppts(dates);
+            currentData = DB.getAppts(dates);
         }
 
         //Displays appointments by selected month
@@ -92,9 +99,10 @@ namespace RegGarrettSchedulingSoftware
             }
             cal.UpdateBoldedDates();
             DateTime parsedStart = DateTime.Parse(start);
-            DateTime end = date.AddDays(days);
-            dgv.DataSource = DB.getAppts(parsedStart, end);
-            currentData = DB.getAppts(parsedStart, end);
+            DateTime parsedEnd = date.AddDays(days);
+            List<DateTime> dates = new List<DateTime> { parsedStart, parsedEnd };
+            dgv.DataSource = DB.getAppts(dates);
+            currentData = DB.getAppts(dates);
         }
 
 
@@ -145,9 +153,24 @@ namespace RegGarrettSchedulingSoftware
             custMan.ShowDialog();
         }
 
+        //Pulls up customer by selected Id
         private void lookUpCustomer_Click(object sender, EventArgs e)
         {
-            //Pulls up customer by selected id
+            int id = Convert.ToInt32(currentData.Rows[dgv.CurrentCell.RowIndex][0]);
+            DataTable data = new DataTable();
+            data = DB.getOneCustomer(id);
+            MessageBox.Show
+                (
+                    $"    Name:  {data.Rows[0][0].ToString()}" + 
+                    Environment.NewLine +
+                    $"   Phone:  {data.Rows[0][1].ToString()}" +
+                    Environment.NewLine +
+                    $"Address:  {data.Rows[0][2].ToString()}" +
+                    Environment.NewLine +
+                    $"        City:  {data.Rows[0][3].ToString()}" +
+                    Environment.NewLine +
+                    $"Country:  {data.Rows[0][4].ToString()}"
+                );
         }
 
         private void exit_Click(object sender, EventArgs e)
