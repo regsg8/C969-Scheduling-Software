@@ -134,10 +134,9 @@ namespace RegGarrettSchedulingSoftware
         //Updates one customer by id
         public static void updateCustomer(int id, string name, string phone, string address, string city, string country, string zip)
         {
-            //check if address needs to update, check for string "no change"
+            //Check for string "no change"
             //if "no change" is not present on any item, then add a string to update that field
-
-            //
+            
         }
 
         //Check if country is in db, if not insert new country, return countryId
@@ -158,8 +157,6 @@ namespace RegGarrettSchedulingSoftware
                 {
                     MySqlCommand insertCountry = new MySqlCommand($"INSERT INTO country (country, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{country}', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
                     insertCountry.ExecuteNonQuery();
-                    //check
-                    MessageBox.Show("Inserted country Id: " + insertCountry.LastInsertedId.ToString());
                     countryId = int.Parse(insertCountry.LastInsertedId.ToString());
                     return countryId;
                 }
@@ -200,8 +197,6 @@ namespace RegGarrettSchedulingSoftware
                 {
                     MySqlCommand insertCity = new MySqlCommand($"INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{city}', '{countryId}', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
                     insertCity.ExecuteNonQuery();
-                    //check
-                    MessageBox.Show("Inserted city Id: " + insertCity.LastInsertedId.ToString());
                     cityId = int.Parse(insertCity.LastInsertedId.ToString());
                     return cityId;
                 }
@@ -236,8 +231,6 @@ namespace RegGarrettSchedulingSoftware
                 int addressId;
                 MySqlCommand insertAddress = new MySqlCommand($"INSERT INTO address (address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{address}', 'not needed', '{cityId}', '{zip}', '{phone}', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
                 insertAddress.ExecuteNonQuery();
-                //check
-                MessageBox.Show("Inserted address Id: " + insertAddress.LastInsertedId.ToString());
                 addressId = int.Parse(insertAddress.LastInsertedId.ToString());
                 return addressId;
             }

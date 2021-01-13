@@ -159,18 +159,74 @@ namespace RegGarrettSchedulingSoftware
             int id = Convert.ToInt32(currentData.Rows[dgv.CurrentCell.RowIndex][0]);
             DataTable data = new DataTable();
             data = DB.getOneCustomer(id);
+            //MessageBox.Show
+            //    (
+            //        $"    Name:  {data.Rows[0][0]}" + 
+            //        Environment.NewLine +
+            //        $"   Phone:  {data.Rows[0][1]}" +
+            //        Environment.NewLine +
+            //        $"Address:  {data.Rows[0][2]}" +
+            //        Environment.NewLine +
+            //        $"        City:  {data.Rows[0][3]}" +
+            //        Environment.NewLine +
+            //        $"Country:  {data.Rows[0][4]}"
+            //    );
             MessageBox.Show
                 (
-                    $"    Name:  {data.Rows[0][0].ToString()}" + 
-                    Environment.NewLine +
-                    $"   Phone:  {data.Rows[0][1].ToString()}" +
-                    Environment.NewLine +
-                    $"Address:  {data.Rows[0][2].ToString()}" +
-                    Environment.NewLine +
-                    $"        City:  {data.Rows[0][3].ToString()}" +
-                    Environment.NewLine +
-                    $"Country:  {data.Rows[0][4].ToString()}"
+                    $"    Name:  {data.Rows[0][0]}\n" +
+                    $"   Phone:  {data.Rows[0][1]}\n"+
+                    $"Address:  {data.Rows[0][2]}\n" +
+                    $"        City:  {data.Rows[0][3]}\n"+
+                    $"Country:  {data.Rows[0][4]}"
                 );
+        }
+
+        //Gathers list of textboxes
+        public static List<TextBox> getTextBoxes(Form form)
+        {
+            List<TextBox> textBoxes = new List<TextBox>();
+            foreach (Control c in form.Controls)
+            {
+                if (c is TextBox)
+                {
+                    textBoxes.Add(c as TextBox);
+                }
+            }
+            return textBoxes;
+        }
+
+        //Creates a string listing any empty textboxes
+        public static string getEmptyTextboxError(List<TextBox> textboxes)
+        {
+            MessageBox.Show("getEmptyTextBoxError started");
+            string mbString = "";
+            List<string> errors = new List<string>();
+            //Uses lambda to shorten syntax of cycling through textboxes
+            textboxes.ForEach(t =>
+                            {
+                                 if (t.Text.ToString() == "")
+                                {
+                                    string e = "";
+                                    if (t.Name.ToString() == "nameInput") e = "Name";
+                                    if (t.Name.ToString() == "phoneInput") e = "Phone";
+                                    if (t.Name.ToString() == "addressInput") e = "Address";
+                                    if (t.Name.ToString() == "cityInput") e = "City";
+                                    if (t.Name.ToString() == "countryInput") e = "Country";
+                                    if (t.Name.ToString() == "zipInput") e = "Zip Code";
+                                    errors.Add(e);
+                                }
+                            }
+            );
+            if (errors.Count != 0)
+            {
+                //Uses lambda to shorten syntax of cycling through strings
+                errors.ForEach(s =>
+                            {
+                                mbString = mbString + $"{s} cannot be blank\n";   
+                            }
+                );
+            }
+            return mbString;
         }
 
         private void exit_Click(object sender, EventArgs e)

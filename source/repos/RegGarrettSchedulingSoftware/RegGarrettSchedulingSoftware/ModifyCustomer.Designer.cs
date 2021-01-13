@@ -29,7 +29,6 @@ namespace RegGarrettSchedulingSoftware
         /// </summary>
         private void InitializeComponent()
         {
-            this.inputPanel = new System.Windows.Forms.Panel();
             this.zipInput = new System.Windows.Forms.TextBox();
             this.nameInput = new System.Windows.Forms.TextBox();
             this.countryInput = new System.Windows.Forms.TextBox();
@@ -45,60 +44,46 @@ namespace RegGarrettSchedulingSoftware
             this.cancelCustomer = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.titleLabel = new System.Windows.Forms.Label();
-            this.inputPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // inputPanel
-            // 
-            this.inputPanel.Controls.Add(this.zipInput);
-            this.inputPanel.Controls.Add(this.nameInput);
-            this.inputPanel.Controls.Add(this.countryInput);
-            this.inputPanel.Controls.Add(this.phoneInput);
-            this.inputPanel.Controls.Add(this.addressInput);
-            this.inputPanel.Controls.Add(this.cityInput);
-            this.inputPanel.Location = new System.Drawing.Point(82, 21);
-            this.inputPanel.Name = "inputPanel";
-            this.inputPanel.Size = new System.Drawing.Size(169, 184);
-            this.inputPanel.TabIndex = 27;
             // 
             // zipInput
             // 
-            this.zipInput.Location = new System.Drawing.Point(3, 158);
+            this.zipInput.Location = new System.Drawing.Point(82, 180);
             this.zipInput.Name = "zipInput";
             this.zipInput.Size = new System.Drawing.Size(158, 20);
             this.zipInput.TabIndex = 16;
             // 
             // nameInput
             // 
-            this.nameInput.Location = new System.Drawing.Point(3, 26);
+            this.nameInput.Location = new System.Drawing.Point(82, 48);
             this.nameInput.Name = "nameInput";
             this.nameInput.Size = new System.Drawing.Size(158, 20);
             this.nameInput.TabIndex = 8;
             // 
             // countryInput
             // 
-            this.countryInput.Location = new System.Drawing.Point(3, 131);
+            this.countryInput.Location = new System.Drawing.Point(82, 153);
             this.countryInput.Name = "countryInput";
             this.countryInput.Size = new System.Drawing.Size(158, 20);
             this.countryInput.TabIndex = 15;
             // 
             // phoneInput
             // 
-            this.phoneInput.Location = new System.Drawing.Point(3, 52);
+            this.phoneInput.Location = new System.Drawing.Point(82, 74);
             this.phoneInput.Name = "phoneInput";
             this.phoneInput.Size = new System.Drawing.Size(158, 20);
             this.phoneInput.TabIndex = 9;
             // 
             // addressInput
             // 
-            this.addressInput.Location = new System.Drawing.Point(3, 78);
+            this.addressInput.Location = new System.Drawing.Point(82, 100);
             this.addressInput.Name = "addressInput";
             this.addressInput.Size = new System.Drawing.Size(158, 20);
             this.addressInput.TabIndex = 10;
             // 
             // cityInput
             // 
-            this.cityInput.Location = new System.Drawing.Point(3, 104);
+            this.cityInput.Location = new System.Drawing.Point(82, 126);
             this.cityInput.Name = "cityInput";
             this.cityInput.Size = new System.Drawing.Size(158, 20);
             this.cityInput.TabIndex = 11;
@@ -191,11 +176,16 @@ namespace RegGarrettSchedulingSoftware
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 321);
+            this.ClientSize = new System.Drawing.Size(304, 317);
+            this.Controls.Add(this.zipInput);
             this.Controls.Add(this.titleLabel);
-            this.Controls.Add(this.inputPanel);
+            this.Controls.Add(this.nameInput);
+            this.Controls.Add(this.countryInput);
+            this.Controls.Add(this.phoneInput);
             this.Controls.Add(this.zipLabel);
+            this.Controls.Add(this.addressInput);
             this.Controls.Add(this.countryLabel);
+            this.Controls.Add(this.cityInput);
             this.Controls.Add(this.cityLabel);
             this.Controls.Add(this.lastLabel);
             this.Controls.Add(this.addressLabel);
@@ -204,16 +194,12 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.addButton);
             this.Name = "ModifyCustomer";
             this.Text = "Scheduling Software";
-            this.inputPanel.ResumeLayout(false);
-            this.inputPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel inputPanel;
         private System.Windows.Forms.TextBox zipInput;
         private System.Windows.Forms.TextBox nameInput;
         private System.Windows.Forms.TextBox countryInput;

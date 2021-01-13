@@ -21,12 +21,20 @@ namespace RegGarrettSchedulingSoftware
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            //maybe put a lambda here to cycle through the textboxes and check for blank boxes
-            //inputPanel textbox children?
-            string name = firstInput.Text.ToString() + " " + lastInput.Text.ToString();
-            DB.addNewCustomer(name, phoneInput.Text.ToString(), addressInput.Text.ToString(), cityInput.Text.ToString(), countryInput.Text.ToString(), zipInput.Text.ToString());
-            customerM.refreshDGV();
-            this.Close();
+            //Check to make sure all textbox fields have values
+            List<TextBox> textboxes = new List<TextBox>();
+            textboxes = Dashboard.getTextBoxes(this);
+            string error = Dashboard.getEmptyTextboxError(textboxes);
+            if (error != "")
+            {
+                MessageBox.Show(error);
+            }
+            else
+            {
+                DB.addNewCustomer(nameInput.Text.ToString(), phoneInput.Text.ToString(), addressInput.Text.ToString(), cityInput.Text.ToString(), countryInput.Text.ToString(), zipInput.Text.ToString());
+                customerM.refreshDGV();
+                this.Close();
+            }
         }
 
         private void cancelCustomer_Click(object sender, EventArgs e)
