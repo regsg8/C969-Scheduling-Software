@@ -59,15 +59,22 @@ namespace RegGarrettSchedulingSoftware
         //Opens Modify Customer dialog with selected customer's ID
         private void editCustomer_Click(object sender, EventArgs e)
         {
-            this.Hide();
             int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
-            ModifyCustomer modify = new ModifyCustomer(id);
-            modify.Show();
+            ModifyCustomer modify = new ModifyCustomer(id, this);
+            modify.ShowDialog();
         }
 
         private void deleteCustomer_Click(object sender, EventArgs e)
         {
-
+            string name = dgv.Rows[dgv.CurrentCell.RowIndex].Cells[1].Value.ToString();
+            DialogResult confirm = MessageBox.Show($"Are you sure you want to delete {name}?", "Delete Confirmation", MessageBoxButtons.YesNo);
+            if (confirm == DialogResult.Yes)
+            {
+                int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
+                DB.deleteCustomer(id);
+                refreshDGV();
+                MessageBox.Show($"{name} deleted.");
+            }
         }
 
         private void returnDashboard_Click(object sender, EventArgs e)

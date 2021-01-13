@@ -114,6 +114,7 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.addCustomer);
             this.Controls.Add(this.titleLabel);
             this.Controls.Add(this.dgv);
+            this.LayoutMdi(System.Windows.Forms.MdiLayout.Cascade);
             this.Name = "CustomerManagement";
             this.Text = "Scheduling Software";
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();

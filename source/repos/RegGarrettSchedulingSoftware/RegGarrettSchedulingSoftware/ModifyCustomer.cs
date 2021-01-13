@@ -13,6 +13,7 @@ namespace RegGarrettSchedulingSoftware
     public partial class ModifyCustomer : Form
     {
         private DataTable cust = new DataTable();
+        private CustomerManagement customerM;
         private static int currentId;
         private string nameUpdate;
         private string phoneUpdate;
@@ -20,11 +21,12 @@ namespace RegGarrettSchedulingSoftware
         private string cityUpdate;
         private string countryUpdate;
         private string zipUpdate;
-        public ModifyCustomer(int id)
+        public ModifyCustomer(int id, CustomerManagement form)
         {
             InitializeComponent();
             currentId = id;
             cust = DB.getOneCustomer(currentId);
+            customerM = form;
             populateFields();
         }
 
@@ -59,21 +61,20 @@ namespace RegGarrettSchedulingSoftware
             }
             else
             {
-                //Pass "no change" if a field didn't change
-                nameUpdate = nameInput.Text.ToString() == cust.Rows[0][0].ToString() ? "no change" : nameInput.Text.ToString();
-                phoneUpdate = phoneInput.Text.ToString() == cust.Rows[0][1].ToString() ? "no change" : phoneInput.Text.ToString();
-                addressUpdate = addressInput.Text.ToString() == cust.Rows[0][2].ToString() ? "no change" : addressInput.Text.ToString();
-                cityUpdate = cityInput.Text.ToString() == cust.Rows[0][3].ToString() ? "no change" : cityInput.Text.ToString();
-                countryUpdate = countryInput.Text.ToString() == cust.Rows[0][4].ToString() ? "no change" : countryInput.Text.ToString();
-                zipUpdate = zipInput.Text.ToString() == cust.Rows[0][5].ToString() ? "no change" : zipInput.Text.ToString();
+                nameUpdate = nameInput.Text.ToString();
+                phoneUpdate = phoneInput.Text.ToString();
+                addressUpdate = addressInput.Text.ToString();
+                cityUpdate = cityInput.Text.ToString();
+                countryUpdate = countryInput.Text.ToString();
+                zipUpdate = zipInput.Text.ToString();
                 DB.updateCustomer(currentId, nameUpdate, phoneUpdate, addressUpdate, cityUpdate, countryUpdate, zipUpdate);
+                customerM.refreshDGV();
+                this.Close();
             }
         }
 
         private void cancelCustomer_Click(object sender, EventArgs e)
         {
-            CustomerManagement custMan = new CustomerManagement();
-            custMan.Show();
             this.Close();
         }
     }

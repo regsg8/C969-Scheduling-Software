@@ -164,6 +164,7 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.weeklyRadio);
             this.Controls.Add(this.cal);
             this.Controls.Add(this.titleLabel);
+            this.LayoutMdi(System.Windows.Forms.MdiLayout.Cascade);
             this.Name = "Dashboard";
             this.Text = "Schedule Software";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dashboard_FormClosed);

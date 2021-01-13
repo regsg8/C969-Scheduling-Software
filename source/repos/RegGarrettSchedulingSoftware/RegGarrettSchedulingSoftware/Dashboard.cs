@@ -195,10 +195,9 @@ namespace RegGarrettSchedulingSoftware
             return textBoxes;
         }
 
-        //Creates a string listing any empty textboxes
+        //Creates a messagebox string for any empty textboxes
         public static string getEmptyTextboxError(List<TextBox> textboxes)
         {
-            MessageBox.Show("getEmptyTextBoxError started");
             string mbString = "";
             List<string> errors = new List<string>();
             //Uses lambda to shorten syntax of cycling through textboxes

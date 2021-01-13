@@ -41,9 +41,5 @@ namespace RegGarrettSchedulingSoftware
         {
             this.Close();
         }
-        private void AddCustomer_FormClosed(object sender, EventArgs e)
-        {
-            
-        }
     }
 }

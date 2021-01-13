@@ -134,9 +134,44 @@ namespace RegGarrettSchedulingSoftware
         //Updates one customer by id
         public static void updateCustomer(int id, string name, string phone, string address, string city, string country, string zip)
         {
-            //Check for string "no change"
-            //if "no change" is not present on any item, then add a string to update that field
-            
+            int countryId = getCountryId(country);
+            int cityId = getCityId(city, countryId);
+            int addressId = getAddressId(address, phone, cityId, zip);
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand updateCust = new MySqlCommand($"UPDATE customer SET customerName = '{name}', addressId = '{addressId}', lastUpdateBy = '{Dashboard.userName}' WHERE customerId = '{id}'", conn);
+                updateCust.ExecuteNonQuery();
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error updating customer: " + x.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        //Deltes one customer by id
+        public static void deleteCustomer(int id)
+        {
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand deleteCust = new MySqlCommand($"DELETE FROM customer WHERE customerId = '{id}'", conn);
+                deleteCust.ExecuteNonQuery();
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error deleting customer: " + x.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         //Check if country is in db, if not insert new country, return countryId

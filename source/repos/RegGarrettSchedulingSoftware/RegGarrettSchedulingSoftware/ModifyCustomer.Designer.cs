@@ -192,6 +192,7 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.phoneLabel);
             this.Controls.Add(this.cancelCustomer);
             this.Controls.Add(this.addButton);
+            this.LayoutMdi(System.Windows.Forms.MdiLayout.Cascade);
             this.Name = "ModifyCustomer";
             this.Text = "Scheduling Software";
             this.ResumeLayout(false);
