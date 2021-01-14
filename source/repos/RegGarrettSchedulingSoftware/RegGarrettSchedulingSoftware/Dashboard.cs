@@ -145,6 +145,7 @@ namespace RegGarrettSchedulingSoftware
         private void editAppt_Click(object sender, EventArgs e)
         {
             //fetch selected appt and open modify appointment form
+            
         }
 
         private void manageCust_Click(object sender, EventArgs e)
@@ -159,18 +160,6 @@ namespace RegGarrettSchedulingSoftware
             int id = Convert.ToInt32(currentData.Rows[dgv.CurrentCell.RowIndex][0]);
             DataTable data = new DataTable();
             data = DB.getOneCustomer(id);
-            //MessageBox.Show
-            //    (
-            //        $"    Name:  {data.Rows[0][0]}" + 
-            //        Environment.NewLine +
-            //        $"   Phone:  {data.Rows[0][1]}" +
-            //        Environment.NewLine +
-            //        $"Address:  {data.Rows[0][2]}" +
-            //        Environment.NewLine +
-            //        $"        City:  {data.Rows[0][3]}" +
-            //        Environment.NewLine +
-            //        $"Country:  {data.Rows[0][4]}"
-            //    );
             MessageBox.Show
                 (
                     $"    Name:  {data.Rows[0][0]}\n" +
