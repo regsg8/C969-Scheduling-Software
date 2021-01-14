@@ -118,6 +118,7 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.usernameLabel);
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.titleLabel);
+            this.LayoutMdi(System.Windows.Forms.MdiLayout.Cascade);
             this.Name = "Login";
             this.Text = "Scheduling Software";
             this.ResumeLayout(false);

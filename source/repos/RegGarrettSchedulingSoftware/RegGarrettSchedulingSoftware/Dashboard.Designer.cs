@@ -39,6 +39,8 @@ namespace RegGarrettSchedulingSoftware
             this.exit = new System.Windows.Forms.Button();
             this.manageCust = new System.Windows.Forms.Button();
             this.lookUpCustomer = new System.Windows.Forms.Button();
+            this.reports = new System.Windows.Forms.Button();
+            this.deleteAppt = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,7 +56,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             // cal
             // 
-            this.cal.Location = new System.Drawing.Point(18, 81);
+            this.cal.Location = new System.Drawing.Point(646, 52);
             this.cal.Name = "cal";
             this.cal.TabIndex = 1;
             this.cal.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.cal_DateChanged);
@@ -63,7 +65,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             this.weeklyRadio.AutoSize = true;
             this.weeklyRadio.Checked = true;
-            this.weeklyRadio.Location = new System.Drawing.Point(67, 52);
+            this.weeklyRadio.Location = new System.Drawing.Point(695, 23);
             this.weeklyRadio.Name = "weeklyRadio";
             this.weeklyRadio.Size = new System.Drawing.Size(61, 17);
             this.weeklyRadio.TabIndex = 2;
@@ -75,7 +77,7 @@ namespace RegGarrettSchedulingSoftware
             // monthlyRadio
             // 
             this.monthlyRadio.AutoSize = true;
-            this.monthlyRadio.Location = new System.Drawing.Point(134, 52);
+            this.monthlyRadio.Location = new System.Drawing.Point(762, 23);
             this.monthlyRadio.Name = "monthlyRadio";
             this.monthlyRadio.Size = new System.Drawing.Size(62, 17);
             this.monthlyRadio.TabIndex = 3;
@@ -91,29 +93,28 @@ namespace RegGarrettSchedulingSoftware
             this.dgv.AllowUserToResizeColumns = false;
             this.dgv.AllowUserToResizeRows = false;
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv.Location = new System.Drawing.Point(308, 81);
+            this.dgv.Location = new System.Drawing.Point(16, 52);
             this.dgv.Name = "dgv";
             this.dgv.ReadOnly = true;
+            this.dgv.RowHeadersVisible = false;
             this.dgv.Size = new System.Drawing.Size(603, 331);
             this.dgv.TabIndex = 4;
-            this.dgv.AutoGenerateColumns = false;
-            this.dgv.RowHeadersVisible = false;
             // 
             // addAppt
             // 
-            this.addAppt.Location = new System.Drawing.Point(18, 255);
+            this.addAppt.Location = new System.Drawing.Point(16, 389);
             this.addAppt.Name = "addAppt";
-            this.addAppt.Size = new System.Drawing.Size(227, 23);
+            this.addAppt.Size = new System.Drawing.Size(146, 23);
             this.addAppt.TabIndex = 5;
-            this.addAppt.Text = "New Appoinment";
+            this.addAppt.Text = "New Appointment";
             this.addAppt.UseVisualStyleBackColor = true;
             this.addAppt.Click += new System.EventHandler(this.addAppt_Click);
             // 
             // editAppt
             // 
-            this.editAppt.Location = new System.Drawing.Point(308, 418);
+            this.editAppt.Location = new System.Drawing.Point(168, 389);
             this.editAppt.Name = "editAppt";
-            this.editAppt.Size = new System.Drawing.Size(227, 23);
+            this.editAppt.Size = new System.Drawing.Size(146, 23);
             this.editAppt.TabIndex = 6;
             this.editAppt.Text = "Edit Appointment";
             this.editAppt.UseVisualStyleBackColor = true;
@@ -121,7 +122,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             // exit
             // 
-            this.exit.Location = new System.Drawing.Point(16, 448);
+            this.exit.Location = new System.Drawing.Point(646, 389);
             this.exit.Name = "exit";
             this.exit.Size = new System.Drawing.Size(227, 23);
             this.exit.TabIndex = 7;
@@ -131,7 +132,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             // manageCust
             // 
-            this.manageCust.Location = new System.Drawing.Point(16, 389);
+            this.manageCust.Location = new System.Drawing.Point(646, 274);
             this.manageCust.Name = "manageCust";
             this.manageCust.Size = new System.Drawing.Size(227, 23);
             this.manageCust.TabIndex = 8;
@@ -141,19 +142,41 @@ namespace RegGarrettSchedulingSoftware
             // 
             // lookUpCustomer
             // 
-            this.lookUpCustomer.Location = new System.Drawing.Point(541, 418);
+            this.lookUpCustomer.Location = new System.Drawing.Point(473, 389);
             this.lookUpCustomer.Name = "lookUpCustomer";
-            this.lookUpCustomer.Size = new System.Drawing.Size(225, 23);
+            this.lookUpCustomer.Size = new System.Drawing.Size(146, 23);
             this.lookUpCustomer.TabIndex = 9;
             this.lookUpCustomer.Text = "Look Up Customer";
             this.lookUpCustomer.UseVisualStyleBackColor = true;
             this.lookUpCustomer.Click += new System.EventHandler(this.lookUpCustomer_Click);
             // 
+            // reports
+            // 
+            this.reports.Location = new System.Drawing.Point(646, 312);
+            this.reports.Name = "reports";
+            this.reports.Size = new System.Drawing.Size(227, 23);
+            this.reports.TabIndex = 10;
+            this.reports.Text = "Reports";
+            this.reports.UseVisualStyleBackColor = true;
+            this.reports.Click += new System.EventHandler(this.reports_Click);
+            // 
+            // deleteAppt
+            // 
+            this.deleteAppt.Location = new System.Drawing.Point(320, 389);
+            this.deleteAppt.Name = "deleteAppt";
+            this.deleteAppt.Size = new System.Drawing.Size(146, 23);
+            this.deleteAppt.TabIndex = 11;
+            this.deleteAppt.Text = "Delete Appointment";
+            this.deleteAppt.UseVisualStyleBackColor = true;
+            this.deleteAppt.Click += new System.EventHandler(this.deleteAppt_Click);
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(951, 483);
+            this.ClientSize = new System.Drawing.Size(896, 434);
+            this.Controls.Add(this.deleteAppt);
+            this.Controls.Add(this.reports);
             this.Controls.Add(this.lookUpCustomer);
             this.Controls.Add(this.manageCust);
             this.Controls.Add(this.exit);
@@ -164,7 +187,6 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.weeklyRadio);
             this.Controls.Add(this.cal);
             this.Controls.Add(this.titleLabel);
-            this.LayoutMdi(System.Windows.Forms.MdiLayout.Cascade);
             this.Name = "Dashboard";
             this.Text = "Schedule Software";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dashboard_FormClosed);
@@ -186,5 +208,7 @@ namespace RegGarrettSchedulingSoftware
         private System.Windows.Forms.Button exit;
         private System.Windows.Forms.Button manageCust;
         private System.Windows.Forms.Button lookUpCustomer;
+        private System.Windows.Forms.Button reports;
+        private System.Windows.Forms.Button deleteAppt;
     }
 }

@@ -41,6 +41,7 @@ namespace RegGarrettSchedulingSoftware
             dgv.Columns[5].HeaderText = "Country";
             dgv.Columns[5].DataPropertyName = "country";
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.AutoGenerateColumns = false;
             dgv.DataSource = DB.getCustomers();
             currentData = DB.getCustomers();
         }

@@ -14,7 +14,8 @@ namespace RegGarrettSchedulingSoftware
     public partial class Dashboard : Form
     {
         DateTime today;
-        DateTime selection;
+        public DateTime selection;
+        public bool weeklyChecked = true;
         DataTable currentData = new DataTable();
         public static string userID;
         public static string userName;
@@ -56,16 +57,34 @@ namespace RegGarrettSchedulingSoftware
             dgv.Columns[3].HeaderText = "End";
             dgv.Columns[3].DataPropertyName = "end";
             dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.AutoGenerateColumns = false;
         }
 
         //Gives alert if an appointment starts within 15 min of login
         private void checkAppts()
         {
-            
+            List<DateTime> window = new List<DateTime> { today, today.AddMinutes(15) };
+            DataTable windowAppts = new DataTable();
+            windowAppts = DB.getAppts(window);
+            if (windowAppts.Rows.Count > 0)
+            {
+                string mbString = "You have appointments starting within 15\n minutes with the following customers: \n\n";
+                List<string> appts = new List<string>();
+                for (int i = 0; i < windowAppts.Rows.Count; i++)
+                {
+                    appts.Add(windowAppts.Rows[i][1].ToString());
+                }
+                //Uses lambda to shorten syntax of dynamically building a string
+                appts.ForEach(s =>
+                {
+                    mbString = mbString + $"{s}\n";
+                });
+                MessageBox.Show(mbString);
+            }
         }
 
         //Displays appointments by selected week
-        private void populateWeek(DateTime date)
+        public void populateWeek(DateTime date)
         {
             cal.RemoveAllBoldedDates();
             int day = (int)date.DayOfWeek;
@@ -85,7 +104,7 @@ namespace RegGarrettSchedulingSoftware
         }
 
         //Displays appointments by selected month
-        private void populateMonth(DateTime date)
+        public void populateMonth(DateTime date)
         {
             cal.RemoveAllBoldedDates();
             string start = date.Month.ToString() + "/01/" + date.Year.ToString();
@@ -111,6 +130,7 @@ namespace RegGarrettSchedulingSoftware
             if (weeklyRadio.Checked)
             {
                 populateWeek(selection);
+                weeklyChecked = true;
             }
         }
 
@@ -119,11 +139,12 @@ namespace RegGarrettSchedulingSoftware
             if (monthlyRadio.Checked)
             {
                 populateMonth(selection);
+                weeklyChecked = false;
             }   
         }
 
         //Populates either weekly or monthly appointments based on radio selection
-        private void cal_DateChanged(object sender, DateRangeEventArgs e)
+        public void refreshAppointments()
         {
             selection = cal.SelectionRange.Start;
             if (weeklyRadio.Checked)
@@ -136,16 +157,23 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
+        //Refreshes appointments on date change
+        private void cal_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            refreshAppointments();
+        }
+
         private void addAppt_Click(object sender, EventArgs e)
         {
-            AddAppointment addApp = new AddAppointment();
+            AddAppointment addApp = new AddAppointment(this);
             addApp.ShowDialog();
         }
 
         private void editAppt_Click(object sender, EventArgs e)
         {
-            //fetch selected appt and open modify appointment form
-            
+            int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
+            ModifyAppointment modApp = new ModifyAppointment(id, this);
+            modApp.ShowDialog();
         }
 
         private void manageCust_Click(object sender, EventArgs e)
@@ -157,7 +185,7 @@ namespace RegGarrettSchedulingSoftware
         //Pulls up customer by selected Id
         private void lookUpCustomer_Click(object sender, EventArgs e)
         {
-            int id = Convert.ToInt32(currentData.Rows[dgv.CurrentCell.RowIndex][0]);
+            int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
             DataTable data = new DataTable();
             data = DB.getOneCustomer(id);
             MessageBox.Show
@@ -168,6 +196,33 @@ namespace RegGarrettSchedulingSoftware
                     $"        City:  {data.Rows[0][3]}\n"+
                     $"Country:  {data.Rows[0][4]}"
                 );
+        }
+
+        private void deleteAppt_Click(object sender, EventArgs e)
+        {
+            string name = dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString();
+            DialogResult confirm = MessageBox.Show($"Are you sure you want to delete your appointment with {name}?", "Delete Confirmation", MessageBoxButtons.YesNo);
+            if (confirm == DialogResult.Yes)
+            {
+                int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
+                DB.deleteAppointment(id);
+                refreshAppointments();
+                MessageBox.Show($"Appointment deleted.");
+            }
+        }
+
+        private void reports_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void Dashboard_FormClosed(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
         //Gathers list of textboxes
@@ -217,14 +272,5 @@ namespace RegGarrettSchedulingSoftware
             return mbString;
         }
 
-        private void exit_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void Dashboard_FormClosed(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
     }
 }

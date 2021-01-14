@@ -10,15 +10,20 @@ using System.Windows.Forms;
 
 namespace RegGarrettSchedulingSoftware
 {
-    public partial class AddAppointment : Form
+    public partial class ModifyAppointment : Form
     {
-        private Dashboard dash;
-        public AddAppointment(Dashboard form)
+        Dashboard dash;
+        private DataTable appt = new DataTable();
+        private int currentId;
+        public ModifyAppointment(int id, Dashboard form)
         {
             InitializeComponent();
-            formatCustomerDGV();
-            formatDTPickers();
             dash = form;
+            currentId = id;
+            appt = DB.getOneAppointment(currentId);
+            formatDTPickers();
+            formatCustomerDGV();
+            populateAppt();
         }
 
         private void formatCustomerDGV()
@@ -33,12 +38,10 @@ namespace RegGarrettSchedulingSoftware
             dgv.Columns[2].Width = 151;
             dgv.Columns[2].HeaderText = "Phone";
             dgv.Columns[2].DataPropertyName = "phone";
-            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv.AutoGenerateColumns = false;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv.DataSource = DB.getCustomers();
         }
-
-        //Sets dateTimePickers to select hours instead of dates
         private void formatDTPickers()
         {
             startTimePicker.Format = DateTimePickerFormat.Custom;
@@ -47,17 +50,23 @@ namespace RegGarrettSchedulingSoftware
             endTimePicker.Format = DateTimePickerFormat.Custom;
             endTimePicker.CustomFormat = "hh:mm tt";
             endTimePicker.ShowUpDown = true;
-            setTimeValues();
         }
-
-        //Rounds time values up by increments of 15
-        private void setTimeValues()
+        private void populateAppt()
         {
-            DateTime now = DateTime.Now;
-            TimeSpan rounder = TimeSpan.FromMinutes(15);
-            DateTime rounded = new DateTime((now.Ticks + rounder.Ticks - 1) / rounder.Ticks * rounder.Ticks);
-            startTimePicker.Value = rounded;
-            endTimePicker.Value = startTimePicker.Value.AddMinutes(30);
+            int custRow = 0;
+            for (int i = 0; i < dgv.Rows.Count; i++)
+            {
+                if (int.Parse(dgv.Rows[i].Cells[0].Value.ToString()) == int.Parse(appt.Rows[0][0].ToString())) 
+                {
+                    custRow = i;
+                }
+            }
+            typeInput.Text = appt.Rows[0][1].ToString();
+            startDatePicker.Value = Convert.ToDateTime(appt.Rows[0][2].ToString());
+            startTimePicker.Value = Convert.ToDateTime(appt.Rows[0][2].ToString());
+            endDatePicker.Value = Convert.ToDateTime(appt.Rows[0][3].ToString());
+            endTimePicker.Value = Convert.ToDateTime(appt.Rows[0][3].ToString());
+            dgv.CurrentCell = dgv.Rows[custRow].Cells[0];
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -70,10 +79,10 @@ namespace RegGarrettSchedulingSoftware
             {
                 DateTime start = startDatePicker.Value.Date.AddHours(startTimePicker.Value.Hour).AddMinutes(startTimePicker.Value.Minute);
                 DateTime end = endDatePicker.Value.Date.AddHours(endTimePicker.Value.Hour).AddMinutes(endTimePicker.Value.Minute);
-                List<DateTime> dates = new List<DateTime> { start, end, DateTime.Now };
-                int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
+                List<DateTime> dates = new List<DateTime> { start, end };
+                int custId = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
                 string type = typeInput.Text.ToString();
-                DB.newAppointment(id, type, dates);
+                DB.updateAppointment(currentId, custId, type, dates);
                 //Refreshes dashboard appoinment view based on weekly/monthly
                 if (dash.weeklyChecked)
                 {
@@ -92,5 +101,6 @@ namespace RegGarrettSchedulingSoftware
         {
             this.Close();
         }
+
     }
 }

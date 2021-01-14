@@ -80,11 +80,11 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
-    <Compile Include="ModifyAppoinment.cs">
+    <Compile Include="ModifyAppointment.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ModifyAppoinment.Designer.cs">
-      <DependentUpon>ModifyAppoinment.cs</DependentUpon>
+    <Compile Include="ModifyAppointment.Designer.cs">
+      <DependentUpon>ModifyAppointment.cs</DependentUpon>
     </Compile>
     <Compile Include="ModifyCustomer.cs">
       <SubType>Form</SubType>
@@ -114,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModifyAppointment.resx">
+      <DependentUpon>ModifyAppointment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ModifyCustomer.resx">
       <DependentUpon>ModifyCustomer.cs</DependentUpon>

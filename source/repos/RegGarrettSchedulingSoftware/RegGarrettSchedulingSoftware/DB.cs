@@ -81,7 +81,95 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
-        //Gets all customers for customer management
+        //Adds a new appointment
+        public static void newAppointment(int id, string type, List<DateTime> dates)
+        {
+            List<string> formattedDates = formatDates(dates);
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand addAppt = new MySqlCommand($"INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{id}', '{Dashboard.userID}', 'not needed', 'not needed', 'not needed', 'not needed', '{type}', 'not needed', '{formattedDates[0]}', '{formattedDates[1]}', '{formattedDates[2]}', '{Dashboard.userName}', '{formattedDates[2]}', '{Dashboard.userName}')", conn);
+                addAppt.ExecuteNonQuery();
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error adding appointment: " + x.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        //Deletes an appointment by id
+        public static void deleteAppointment(int id) 
+        {
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand deleteAppt = new MySqlCommand($"DELETE FROM appointment WHERE appointmentId = '{id}'", conn);
+                deleteAppt.ExecuteNonQuery();
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error deleting appointment: " + x.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        //Gets one appointment by id
+        public static DataTable getOneAppointment(int id)
+        {
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand getAppt = new MySqlCommand($"SELECT customerId, type, start, end FROM appointment WHERE appointmentId = '{id}'", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                return data;
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error getting appointment: " + x.Message);
+                DataTable noData = new DataTable();
+                return noData;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        //Updates one appointment by id
+        public static void updateAppointment(int apptId, int custId, string type, List<DateTime> dates)
+        {
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            List<string> formattedDates = formatDates(dates);
+            try
+            {
+                MySqlCommand updateAppt = new MySqlCommand($"UPDATE appointment SET customerId = '{custId}', type = '{type}', start = '{formattedDates[0]}', end = '{formattedDates[1]}', lastUpdateBy = '{Dashboard.userName}' WHERE appointmentId = '{apptId}'", conn);
+                updateAppt.ExecuteNonQuery();
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error updating appointment: " + x.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+
+        //Gets all customers
         public static DataTable getCustomers()
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
@@ -121,7 +209,7 @@ namespace RegGarrettSchedulingSoftware
             }
             catch (Exception x)
             {
-                Console.WriteLine("Error fetching customer: " + x.Message);
+                Console.WriteLine("Error getting customer: " + x.Message);
                 DataTable noData = new DataTable();
                 return noData;
             }
