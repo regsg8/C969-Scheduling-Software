@@ -32,6 +32,8 @@ namespace RegGarrettSchedulingSoftware
             this.titleLabel = new System.Windows.Forms.Label();
             this.consultantCombo = new System.Windows.Forms.ComboBox();
             this.exitButton = new System.Windows.Forms.Button();
+            this.dgv = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
             // titleLabel
@@ -55,7 +57,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             // exitButton
             // 
-            this.exitButton.Location = new System.Drawing.Point(13, 415);
+            this.exitButton.Location = new System.Drawing.Point(544, 415);
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(75, 23);
             this.exitButton.TabIndex = 22;
@@ -63,16 +65,29 @@ namespace RegGarrettSchedulingSoftware
             this.exitButton.UseVisualStyleBackColor = true;
             this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
+            // dgv
+            // 
+            this.dgv.AllowUserToAddRows = false;
+            this.dgv.AllowUserToDeleteRows = false;
+            this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv.Location = new System.Drawing.Point(16, 94);
+            this.dgv.Name = "dgv";
+            this.dgv.ReadOnly = true;
+            this.dgv.Size = new System.Drawing.Size(603, 298);
+            this.dgv.TabIndex = 23;
+            // 
             // ReportConsultantSchedule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(635, 450);
+            this.Controls.Add(this.dgv);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.consultantCombo);
             this.Controls.Add(this.titleLabel);
             this.Name = "ReportConsultantSchedule";
             this.Text = "Scheduling Software";
+            ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -83,5 +98,6 @@ namespace RegGarrettSchedulingSoftware
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.ComboBox consultantCombo;
         private System.Windows.Forms.Button exitButton;
+        private System.Windows.Forms.DataGridView dgv;
     }
 }
