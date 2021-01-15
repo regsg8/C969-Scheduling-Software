@@ -185,7 +185,7 @@ namespace RegGarrettSchedulingSoftware
         //Pulls up customer by selected Id
         private void lookUpCustomer_Click(object sender, EventArgs e)
         {
-            int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
+            int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][0].ToString());
             DataTable data = new DataTable();
             data = DB.getOneCustomer(id);
             MessageBox.Show

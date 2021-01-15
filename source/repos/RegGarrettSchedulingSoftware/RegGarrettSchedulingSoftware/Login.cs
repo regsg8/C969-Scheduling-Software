@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 using MySql.Data.MySqlClient;
+using System.IO;
 
 namespace RegGarrettSchedulingSoftware
 {
@@ -53,6 +54,10 @@ namespace RegGarrettSchedulingSoftware
                 string id = DB.login(usernameInput.Text.ToString(), passwordInput.Text.ToString());
                 if (id != "")
                 {
+                    using(StreamWriter w = File.AppendText(Path.Combine(Directory.GetCurrentDirectory(), "Scheduling Software Log.txt")))
+                    {
+                        w.WriteLine($"EVENT: Login  ||  USER: {usernameInput.Text}  ||  TIME: {DateTime.Now}");
+                    }
                     Dashboard dashboard = new Dashboard(id, usernameInput.Text.ToString());
                     dashboard.Show();
                     this.Close();
