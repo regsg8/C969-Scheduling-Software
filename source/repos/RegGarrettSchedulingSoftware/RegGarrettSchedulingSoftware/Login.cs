@@ -24,16 +24,18 @@ namespace RegGarrettSchedulingSoftware
             checkRegion();
         }
 
-        //Changes language to Russian if the user's format pertains to a Russian speaking region
+        //Translates Login page text to Russian if a user's region format is set to a country where the primary language is Russian
         private void checkRegion()
         {
             RegionInfo regionInfo = new RegionInfo(CultureInfo.CurrentCulture.Name);
             if (regionInfo.TwoLetterISORegionName == "RU")
             {
-                titleLabel.Text = "Программа Планирования";
+                this.Text = "Программа Планирования";
+                titleLabel.Text = "Логин";
                 usernameLabel.Text = "Имя Пользователя";
                 passwordLabel.Text = "Пароль";
                 loginButton.Text = "Войти";
+                exitButton.Text = "Выход";
                 wrongPassword = "Неправильное имя пользователя или пароль.";
                 noPassword = "Пожалуйста, введите свой пароль.";
                 noUsername = "Пожалуйста, введите ваше имя пользователя.";

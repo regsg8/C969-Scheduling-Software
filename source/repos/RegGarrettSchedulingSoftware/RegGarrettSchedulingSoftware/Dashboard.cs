@@ -213,7 +213,8 @@ namespace RegGarrettSchedulingSoftware
 
         private void reports_Click(object sender, EventArgs e)
         {
-
+            Reporting report = new Reporting();
+            report.ShowDialog();
         }
         private void exit_Click(object sender, EventArgs e)
         {
