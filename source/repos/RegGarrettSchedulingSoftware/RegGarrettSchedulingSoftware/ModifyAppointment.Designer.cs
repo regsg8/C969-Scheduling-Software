@@ -186,6 +186,7 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.startDatePicker);
             this.Name = "ModifyAppointment";
             this.Text = "Scheduling Software";
+            this.LayoutMdi(System.Windows.Forms.MdiLayout.Cascade);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -39,8 +39,11 @@ namespace RegGarrettSchedulingSoftware
             this.exit = new System.Windows.Forms.Button();
             this.manageCust = new System.Windows.Forms.Button();
             this.lookUpCustomer = new System.Windows.Forms.Button();
-            this.reports = new System.Windows.Forms.Button();
+            this.byType = new System.Windows.Forms.Button();
             this.deleteAppt = new System.Windows.Forms.Button();
+            this.schedules = new System.Windows.Forms.Button();
+            this.customerAppts = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -132,7 +135,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             // manageCust
             // 
-            this.manageCust.Location = new System.Drawing.Point(646, 274);
+            this.manageCust.Location = new System.Drawing.Point(646, 236);
             this.manageCust.Name = "manageCust";
             this.manageCust.Size = new System.Drawing.Size(227, 23);
             this.manageCust.TabIndex = 8;
@@ -150,15 +153,15 @@ namespace RegGarrettSchedulingSoftware
             this.lookUpCustomer.UseVisualStyleBackColor = true;
             this.lookUpCustomer.Click += new System.EventHandler(this.lookUpCustomer_Click);
             // 
-            // reports
+            // byType
             // 
-            this.reports.Location = new System.Drawing.Point(646, 312);
-            this.reports.Name = "reports";
-            this.reports.Size = new System.Drawing.Size(227, 23);
-            this.reports.TabIndex = 10;
-            this.reports.Text = "Reports";
-            this.reports.UseVisualStyleBackColor = true;
-            this.reports.Click += new System.EventHandler(this.reports_Click);
+            this.byType.Location = new System.Drawing.Point(646, 288);
+            this.byType.Name = "byType";
+            this.byType.Size = new System.Drawing.Size(227, 23);
+            this.byType.TabIndex = 10;
+            this.byType.Text = "Appointments by Type";
+            this.byType.UseVisualStyleBackColor = true;
+            this.byType.Click += new System.EventHandler(this.reports_Click);
             // 
             // deleteAppt
             // 
@@ -170,13 +173,45 @@ namespace RegGarrettSchedulingSoftware
             this.deleteAppt.UseVisualStyleBackColor = true;
             this.deleteAppt.Click += new System.EventHandler(this.deleteAppt_Click);
             // 
+            // schedules
+            // 
+            this.schedules.Location = new System.Drawing.Point(646, 346);
+            this.schedules.Name = "schedules";
+            this.schedules.Size = new System.Drawing.Size(227, 23);
+            this.schedules.TabIndex = 12;
+            this.schedules.Text = "Consultant Schedules";
+            this.schedules.UseVisualStyleBackColor = true;
+            this.schedules.Click += new System.EventHandler(this.schedules_Click);
+            // 
+            // customerAppts
+            // 
+            this.customerAppts.Location = new System.Drawing.Point(646, 317);
+            this.customerAppts.Name = "customerAppts";
+            this.customerAppts.Size = new System.Drawing.Size(227, 23);
+            this.customerAppts.TabIndex = 13;
+            this.customerAppts.Text = "Appointments by Customer";
+            this.customerAppts.UseVisualStyleBackColor = true;
+            this.customerAppts.Click += new System.EventHandler(this.customerAppts_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(646, 269);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(47, 13);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Reports:";
+            // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(896, 434);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.customerAppts);
+            this.Controls.Add(this.schedules);
             this.Controls.Add(this.deleteAppt);
-            this.Controls.Add(this.reports);
+            this.Controls.Add(this.byType);
             this.Controls.Add(this.lookUpCustomer);
             this.Controls.Add(this.manageCust);
             this.Controls.Add(this.exit);
@@ -191,6 +226,7 @@ namespace RegGarrettSchedulingSoftware
             this.Text = "Schedule Software";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Dashboard_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
+            this.LayoutMdi(System.Windows.Forms.MdiLayout.Cascade);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -208,7 +244,10 @@ namespace RegGarrettSchedulingSoftware
         private System.Windows.Forms.Button exit;
         private System.Windows.Forms.Button manageCust;
         private System.Windows.Forms.Button lookUpCustomer;
-        private System.Windows.Forms.Button reports;
+        private System.Windows.Forms.Button byType;
         private System.Windows.Forms.Button deleteAppt;
+        private System.Windows.Forms.Button schedules;
+        private System.Windows.Forms.Button customerAppts;
+        private System.Windows.Forms.Label label1;
     }
 }

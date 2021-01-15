@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 
 namespace RegGarrettSchedulingSoftware
 {
@@ -39,6 +38,7 @@ namespace RegGarrettSchedulingSoftware
             populateWeek(today);
         }
 
+        //---DASHBOARD SETUP AND CONTROLS---//
         //Formats the apppointments DataGridView
         private void formatDGV()
         {
@@ -60,7 +60,7 @@ namespace RegGarrettSchedulingSoftware
             dgv.AutoGenerateColumns = false;
         }
 
-        //Gives alert if an appointment starts within 15 min of login
+        //Gives alert if any appointments starts within 15 min of login
         private void checkAppts()
         {
             List<DateTime> window = new List<DateTime> { today, today.AddMinutes(15) };
@@ -163,17 +163,31 @@ namespace RegGarrettSchedulingSoftware
             refreshAppointments();
         }
 
+
+        //---APPOINTMENT AND CUSTOMER MANAGEMENT---//
+        private void editAppt_Click(object sender, EventArgs e)
+        {
+            int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
+            ModifyAppointment modApp = new ModifyAppointment(id, this);
+            modApp.ShowDialog();
+        }
         private void addAppt_Click(object sender, EventArgs e)
         {
             AddAppointment addApp = new AddAppointment(this);
             addApp.ShowDialog();
         }
 
-        private void editAppt_Click(object sender, EventArgs e)
+        private void deleteAppt_Click(object sender, EventArgs e)
         {
-            int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
-            ModifyAppointment modApp = new ModifyAppointment(id, this);
-            modApp.ShowDialog();
+            string name = dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString();
+            DialogResult confirm = MessageBox.Show($"Are you sure you want to delete your appointment with {name}?", "Delete Confirmation", MessageBoxButtons.YesNo);
+            if (confirm == DialogResult.Yes)
+            {
+                int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
+                DB.deleteAppointment(id);
+                refreshAppointments();
+                MessageBox.Show($"Appointment deleted.");
+            }
         }
 
         private void manageCust_Click(object sender, EventArgs e)
@@ -198,24 +212,31 @@ namespace RegGarrettSchedulingSoftware
                 );
         }
 
-        private void deleteAppt_Click(object sender, EventArgs e)
-        {
-            string name = dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString();
-            DialogResult confirm = MessageBox.Show($"Are you sure you want to delete your appointment with {name}?", "Delete Confirmation", MessageBoxButtons.YesNo);
-            if (confirm == DialogResult.Yes)
-            {
-                int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
-                DB.deleteAppointment(id);
-                refreshAppointments();
-                MessageBox.Show($"Appointment deleted.");
-            }
-        }
 
+        //---REPORTING---//
+        //Report on appointments by type
         private void reports_Click(object sender, EventArgs e)
         {
-            Reporting report = new Reporting();
-            report.ShowDialog();
+            ReportAppointmentTypes types = new ReportAppointmentTypes();
+            types.ShowDialog();
         }
+
+        //Report on appointments by customer
+        private void customerAppts_Click(object sender, EventArgs e)
+        {
+            ReportCustomerAppointments customers = new ReportCustomerAppointments();
+            customers.ShowDialog();
+        }
+
+        //Report on consultant schedules
+        private void schedules_Click(object sender, EventArgs e)
+        {
+            ReportConsultantSchedule consultants = new ReportConsultantSchedule();
+            consultants.ShowDialog();
+        }
+
+
+        //---MISC---//
         private void exit_Click(object sender, EventArgs e)
         {
             Application.Exit();

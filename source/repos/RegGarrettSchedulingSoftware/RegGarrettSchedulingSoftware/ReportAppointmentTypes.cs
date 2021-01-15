@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace RegGarrettSchedulingSoftware
 {
-    public partial class Reporting : Form
+    public partial class ReportAppointmentTypes : Form
     {
-        public Reporting()
+        public ReportAppointmentTypes()
         {
             InitializeComponent();
         }

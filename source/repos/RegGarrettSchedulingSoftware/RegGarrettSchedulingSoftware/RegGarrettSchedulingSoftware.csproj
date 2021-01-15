@@ -94,11 +94,23 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reporting.cs">
+    <Compile Include="ReportAppointmentTypes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Reporting.Designer.cs">
-      <DependentUpon>Reporting.cs</DependentUpon>
+    <Compile Include="ReportAppointmentTypes.Designer.cs">
+      <DependentUpon>ReportAppointmentTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReportConsultantSchedule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportConsultantSchedule.Designer.cs">
+      <DependentUpon>ReportConsultantSchedule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReportCustomerAppointments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportCustomerAppointments.Designer.cs">
+      <DependentUpon>ReportCustomerAppointments.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="AddAppointment.resx">
       <DependentUpon>AddAppointment.cs</DependentUpon>
@@ -130,6 +142,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ReportAppointmentTypes.resx">
+      <DependentUpon>ReportAppointmentTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportConsultantSchedule.resx">
+      <DependentUpon>ReportConsultantSchedule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportCustomerAppointments.resx">
+      <DependentUpon>ReportCustomerAppointments.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

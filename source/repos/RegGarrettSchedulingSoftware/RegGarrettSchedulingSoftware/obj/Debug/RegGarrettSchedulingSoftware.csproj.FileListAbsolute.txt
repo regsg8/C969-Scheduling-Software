@@ -34,3 +34,6 @@ C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedul
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.ModifyCustomer.resources
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.AddAppointment.resources
 C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.ModifyAppointment.resources
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.ReportAppointmentTypes.resources
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.ReportConsultantSchedule.resources
+C:\Users\Reg Garrett\source\repos\RegGarrettSchedulingSoftware\RegGarrettSchedulingSoftware\obj\Debug\RegGarrettSchedulingSoftware.ReportCustomerAppointments.resources

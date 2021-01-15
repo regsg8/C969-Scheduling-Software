@@ -42,19 +42,9 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
-        //Uses lambda to format any number of DateTime items into MySql format and returns them in a list of strings
-        private static List<string> formatDates(List<DateTime> dates)
-        {
-            List<string> formatted = new List<string>();
-            dates.ForEach(d => 
-                                {
-                                    string s = d.ToString("yyyy'-'MM'-'dd HH:mm:ss");
-                                    formatted.Add(s);
-                                }
-            );
-            return formatted;
-        }
+        
 
+        //---Appointment CRUD---//
         //Returns all appointments between given date range
         public static DataTable getAppts(List<DateTime> dates)
         {
@@ -169,6 +159,7 @@ namespace RegGarrettSchedulingSoftware
         }
 
 
+        //---Customer CRUD---//
         //Gets all customers
         public static DataTable getCustomers()
         {
@@ -194,6 +185,37 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
+        public static void addNewCustomer(string name, string phone, string address, string city, string country, string zip)
+        {
+            List<DateTime> now = new List<DateTime> { DateTime.Now };
+            List<string> sqlDate = formatDates(now);
+            try
+            {
+                //Check if country is in db, if not insert new country, return countryId
+                int countryId = getCountryId(country);
+                if (countryId == 0) throw new Exception("No Country ID");
+
+                //Check if city is in db, if not insert new city with countryId, return cityId
+                int cityId = getCityId(city, countryId);
+                if (cityId == 0) throw new Exception("No City ID");
+
+                //Insert new address with cityId, phone, and zip, return addressId
+                int addressId = getAddressId(address, phone, cityId, zip);
+                if (addressId == 0) throw new Exception("No address Id");
+
+                //Insert new customer with name and addressId
+                MySqlConnection conn = new MySqlConnection(sqlString);
+                conn.Open();
+                MySqlCommand insertCust = new MySqlCommand($"INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{name}', '{addressId}', '1', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
+                insertCust.ExecuteNonQuery();
+                MessageBox.Show($"{name} added!");
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error adding new customer: " + x.Message);
+                MessageBox.Show($"Error encountered, {name} not added.");
+            }
+        }
         //Gets one customer by id
         public static DataTable getOneCustomer(int id)
         {
@@ -242,7 +264,7 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
-        //Deltes one customer by id
+        //Deletes one customer by id
         public static void deleteCustomer(int id)
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
@@ -260,6 +282,49 @@ namespace RegGarrettSchedulingSoftware
             {
                 conn.Close();
             }
+        }
+
+
+        //---REPORTING---//
+        //Get all consultants
+        public static DataTable getConsultants()
+        {
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand getCons = new MySqlCommand($"SELECT userId, userName FROM user", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(getCons);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                return data;
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error getting consultants: " + x.Message);
+                DataTable noData = new DataTable();
+                return noData;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+
+
+        //---HELPERS---//
+        //Uses lambda to format any number of DateTime items into MySql format and returns them in a list of strings
+        private static List<string> formatDates(List<DateTime> dates)
+        {
+            List<string> formatted = new List<string>();
+            dates.ForEach(d =>
+            {
+                string s = d.ToString("yyyy'-'MM'-'dd HH:mm:ss");
+                formatted.Add(s);
+            }
+            );
+            return formatted;
         }
 
         //Check if country is in db, if not insert new country, return countryId
@@ -368,37 +433,6 @@ namespace RegGarrettSchedulingSoftware
                 conn.Close();
             }
         }
-
-        public static void addNewCustomer(string name, string phone, string address, string city, string country, string zip)
-        {
-            List<DateTime> now = new List<DateTime> { DateTime.Now };
-            List<string> sqlDate = formatDates(now);
-            try
-            {
-                //Check if country is in db, if not insert new country, return countryId
-                int countryId = getCountryId(country);
-                if (countryId == 0) throw new Exception("No Country ID");
-
-                //Check if city is in db, if not insert new city with countryId, return cityId
-                int cityId = getCityId(city, countryId);
-                if (cityId == 0) throw new Exception("No City ID");
-
-                //Insert new address with cityId, phone, and zip, return addressId
-                int addressId = getAddressId(address, phone, cityId, zip);
-                if (addressId == 0) throw new Exception("No address Id");
-
-                //Insert new customer with name and addressId
-                MySqlConnection conn = new MySqlConnection(sqlString);
-                conn.Open();
-                MySqlCommand insertCust = new MySqlCommand($"INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{name}', '{addressId}', '1', '{sqlDate[0]}', '{Dashboard.userName}', '{sqlDate[0]}', '{Dashboard.userName}')", conn);
-                insertCust.ExecuteNonQuery();
-                MessageBox.Show($"{name} added!");
-            }
-            catch (Exception x)
-            {
-                Console.WriteLine("Error adding new customer: " + x.Message);
-                MessageBox.Show($"Error encountered, {name} not added.");
-            }
-        }
+        
     }
 }
