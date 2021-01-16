@@ -336,6 +336,30 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
+        //Get all customer's appointments
+        public static DataTable getCustomerAppts(int id)
+        {
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand getAppts = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.customerId = '{id}'", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                return data;
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error getting customer's appointments: " + x.Message);
+                DataTable noData = new DataTable();
+                return noData;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
 
 
         //---HELPERS---//

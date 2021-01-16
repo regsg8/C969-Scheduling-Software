@@ -34,3 +34,4 @@ EVENT: Login  ||  USER: test  ||  TIME: 1/15/2021 4:45:22 PM
 EVENT: Login  ||  USER: test  ||  TIME: 1/15/2021 4:47:10 PM
 EVENT: Login  ||  USER: test  ||  TIME: 1/15/2021 4:47:52 PM
 EVENT: Login  ||  USER: test  ||  TIME: 1/15/2021 4:48:47 PM
+EVENT: Login  ||  USER: test  ||  TIME: 1/15/2021 4:58:48 PM

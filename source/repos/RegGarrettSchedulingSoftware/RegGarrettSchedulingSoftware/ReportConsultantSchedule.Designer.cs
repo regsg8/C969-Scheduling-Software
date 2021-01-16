@@ -61,7 +61,7 @@ namespace RegGarrettSchedulingSoftware
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(75, 23);
             this.exitButton.TabIndex = 22;
-            this.exitButton.Text = "Exit";
+            this.exitButton.Text = "Close";
             this.exitButton.UseVisualStyleBackColor = true;
             this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
