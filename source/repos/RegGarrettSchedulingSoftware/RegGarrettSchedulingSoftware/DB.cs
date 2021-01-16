@@ -361,6 +361,57 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
+        //Get all appointment Types
+        public static DataTable getApptTypes()
+        {
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand getTypes = new MySqlCommand("SELECT DISTINCT type FROM appointment", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(getTypes);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                return data;
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error getting appointment types: " + x.Message);
+                DataTable noData = new DataTable();
+                return noData;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        //Get appointments by type in date range
+        public static DataTable getTypeAppts(string type, List<DateTime> dates)
+        {
+            List<string> formattedDates = formatDates(dates);
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand getAppts = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.type = '{type}' AND a.start BETWEEN '{formattedDates[0]}' AND '{formattedDates[1]}'", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                return data;
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error getting appointments by type: " + x.Message);
+                DataTable noData = new DataTable();
+                return noData;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
 
         //---HELPERS---//
         //Uses lambda to format any number of DateTime items into MySql format and returns them in a list of strings

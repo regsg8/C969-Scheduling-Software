@@ -98,6 +98,8 @@ namespace RegGarrettSchedulingSoftware
             cal.UpdateBoldedDates();
             DateTime parsedStart = DateTime.Parse(start);
             DateTime parsedEnd = DateTime.Parse(end);
+            TimeSpan hours = new TimeSpan(23, 59, 59);
+            parsedEnd = parsedEnd + hours;
             List<DateTime> dates = new List<DateTime> { parsedStart, parsedEnd };
             dgv.DataSource = DB.getAppts(dates);
             currentData = DB.getAppts(dates);
@@ -117,14 +119,16 @@ namespace RegGarrettSchedulingSoftware
                 cal.AddBoldedDate(count.AddDays(i));
             }
             cal.UpdateBoldedDates();
-            DateTime parsedStart = DateTime.Parse(start);
-            DateTime parsedEnd = date.AddDays(days);
+            DateTime parsedStart = new DateTime(date.Year, date.Month, 1);
+            DateTime parsedEnd = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+            TimeSpan hours = new TimeSpan(23, 59, 59);
+            parsedEnd = parsedEnd + hours;
             List<DateTime> dates = new List<DateTime> { parsedStart, parsedEnd };
             dgv.DataSource = DB.getAppts(dates);
             currentData = DB.getAppts(dates);
         }
-
-
+        
+        //Triggers appointment updates when radio button is clicked
         private void weeklyRadio_CheckedChanged(object sender, EventArgs e)
         {
             if (weeklyRadio.Checked)
@@ -133,7 +137,7 @@ namespace RegGarrettSchedulingSoftware
                 weeklyChecked = true;
             }
         }
-
+        //Triggers appointment updates when radio button is clicked
         private void monthlyRadio_CheckedChanged(object sender, EventArgs e)
         {
             if (monthlyRadio.Checked)
@@ -165,18 +169,20 @@ namespace RegGarrettSchedulingSoftware
 
 
         //---APPOINTMENT AND CUSTOMER MANAGEMENT---//
+        //Opens a form to edit selected appointment
         private void editAppt_Click(object sender, EventArgs e)
         {
             int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
             ModifyAppointment modApp = new ModifyAppointment(id, this);
             modApp.ShowDialog();
         }
+        //Opens a form to add a new appointment
         private void addAppt_Click(object sender, EventArgs e)
         {
             AddAppointment addApp = new AddAppointment(this);
             addApp.ShowDialog();
         }
-
+        //Opens confirmation dialog to delete selected appointment
         private void deleteAppt_Click(object sender, EventArgs e)
         {
             string name = dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString();
@@ -189,14 +195,14 @@ namespace RegGarrettSchedulingSoftware
                 MessageBox.Show($"Appointment deleted.");
             }
         }
-
+        //Opens a form for customer CRUD
         private void manageCust_Click(object sender, EventArgs e)
         {
             CustomerManagement custMan = new CustomerManagement();
             custMan.ShowDialog();
         }
 
-        //Pulls up customer by selected Id
+        //Pulls up dialog with selected customer data
         private void lookUpCustomer_Click(object sender, EventArgs e)
         {
             int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][0].ToString());
