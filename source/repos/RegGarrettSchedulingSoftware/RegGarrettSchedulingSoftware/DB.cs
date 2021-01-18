@@ -81,8 +81,6 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                //if (checkOverlapping(formattedDates)) throw new Exception("Appointment overlaps with existing appointment.");
-                //if (!insideBusinessHours(formattedDates)) throw new Exception("Appointment does not start within local business hours.");
                 MySqlCommand addAppt = new MySqlCommand($"INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{id}', '{Dashboard.userID}', 'not needed', 'not needed', 'not needed', 'not needed', '{type}', 'not needed', '{formattedDates[0]}', '{formattedDates[1]}', '{formattedDates[2]}', '{Dashboard.userName}', '{formattedDates[2]}', '{Dashboard.userName}')", conn);
                 addAppt.ExecuteNonQuery();
             }
@@ -152,8 +150,6 @@ namespace RegGarrettSchedulingSoftware
             List<string> formattedDates = formatDates(dates);
             try
             {
-                //if (checkOverlapping(formattedDates)) throw new Exception("Appointment time overlaps with existing appointment.");
-                //if (!insideBusinessHours(formattedDates)) throw new Exception("Appointment does not occur within local business hours.");
                 MySqlCommand updateAppt = new MySqlCommand($"UPDATE appointment SET customerId = '{custId}', type = '{type}', start = '{formattedDates[0]}', end = '{formattedDates[1]}', lastUpdateBy = '{Dashboard.userName}', lastUpdate = '{formattedDates[2]}' WHERE appointmentId = '{apptId}'", conn);
                 updateAppt.ExecuteNonQuery();
             }
