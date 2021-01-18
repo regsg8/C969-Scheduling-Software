@@ -13,6 +13,7 @@ namespace RegGarrettSchedulingSoftware
     public partial class Dashboard : Form
     {
         DateTime today;
+        public static TimeZoneInfo timeZone;
         public DateTime selection;
         public bool weeklyChecked = true;
         DataTable currentData = new DataTable();
@@ -31,6 +32,7 @@ namespace RegGarrettSchedulingSoftware
             InitializeComponent();
             today = DateTime.Now;
             selection = DateTime.Now;
+            timeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneInfo.Local.Id);
             userID = id;
             userName = username;
             formatDGV();
@@ -63,7 +65,9 @@ namespace RegGarrettSchedulingSoftware
         //Gives alert if any appointments starts within 15 min of login
         private void checkAppts()
         {
-            List<DateTime> window = new List<DateTime> { today, today.AddMinutes(15) };
+            DateTime start = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
+            DateTime end = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now.AddMinutes(15));
+            List<DateTime> window = new List<DateTime> { start, end };
             DataTable windowAppts = new DataTable();
             windowAppts = DB.getAppts(window);
             if (windowAppts.Rows.Count > 0)
@@ -96,13 +100,13 @@ namespace RegGarrettSchedulingSoftware
                 cal.AddBoldedDate(count.AddDays(i));
             }
             cal.UpdateBoldedDates();
-            DateTime parsedStart = DateTime.Parse(start);
-            DateTime parsedEnd = DateTime.Parse(end);
+            DateTime parsedStart = TimeZoneInfo.ConvertTimeToUtc(DateTime.Parse(start));
+            DateTime parsedEnd = TimeZoneInfo.ConvertTimeToUtc(DateTime.Parse(end));
             TimeSpan hours = new TimeSpan(23, 59, 59);
             parsedEnd = parsedEnd + hours;
             List<DateTime> dates = new List<DateTime> { parsedStart, parsedEnd };
-            dgv.DataSource = DB.getAppts(dates);
             currentData = DB.getAppts(dates);
+            refreshDGV(currentData);
         }
 
         //Displays appointments by selected month
@@ -119,13 +123,30 @@ namespace RegGarrettSchedulingSoftware
                 cal.AddBoldedDate(count.AddDays(i));
             }
             cal.UpdateBoldedDates();
-            DateTime parsedStart = new DateTime(date.Year, date.Month, 1);
-            DateTime parsedEnd = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+            DateTime startDate = new DateTime(date.Year, date.Month, 1);
+            DateTime endDate = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
             TimeSpan hours = new TimeSpan(23, 59, 59);
-            parsedEnd = parsedEnd + hours;
-            List<DateTime> dates = new List<DateTime> { parsedStart, parsedEnd };
-            dgv.DataSource = DB.getAppts(dates);
+            endDate = endDate + hours;
+            DateTime convertedStart = TimeZoneInfo.ConvertTimeToUtc(startDate);
+            DateTime convertedEnd = TimeZoneInfo.ConvertTimeToUtc(endDate);
+            List<DateTime> dates = new List<DateTime> { convertedStart, convertedEnd };
             currentData = DB.getAppts(dates);
+            refreshDGV(currentData);
+            
+        }
+
+        //Populates data into DGV
+        private void refreshDGV(DataTable data)
+        {
+            dgv.Rows.Clear();
+            for (int i = 0; i < currentData.Rows.Count; i++)
+            {
+                string name = currentData.Rows[i][1].ToString();
+                string type = currentData.Rows[i][2].ToString();
+                DateTime start = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(currentData.Rows[i][3].ToString()), timeZone);
+                DateTime end = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(currentData.Rows[i][4].ToString()), timeZone);
+                dgv.Rows.Add(name, type, start, end);
+            }
         }
         
         //Triggers appointment updates when radio button is clicked
@@ -176,12 +197,14 @@ namespace RegGarrettSchedulingSoftware
             ModifyAppointment modApp = new ModifyAppointment(id, this);
             modApp.ShowDialog();
         }
+
         //Opens a form to add a new appointment
         private void addAppt_Click(object sender, EventArgs e)
         {
             AddAppointment addApp = new AddAppointment(this);
             addApp.ShowDialog();
         }
+
         //Opens confirmation dialog to delete selected appointment
         private void deleteAppt_Click(object sender, EventArgs e)
         {
@@ -195,6 +218,7 @@ namespace RegGarrettSchedulingSoftware
                 MessageBox.Show($"Appointment deleted.");
             }
         }
+
         //Opens a form for customer CRUD
         private void manageCust_Click(object sender, EventArgs e)
         {
@@ -253,52 +277,52 @@ namespace RegGarrettSchedulingSoftware
             Application.Exit();
         }
 
-        //Gathers list of textboxes
-        public static List<TextBox> getTextBoxes(Form form)
-        {
-            List<TextBox> textBoxes = new List<TextBox>();
-            foreach (Control c in form.Controls)
-            {
-                if (c is TextBox)
-                {
-                    textBoxes.Add(c as TextBox);
-                }
-            }
-            return textBoxes;
-        }
+        ////Gathers list of textboxes
+        //public static List<TextBox> getTextBoxes(Form form)
+        //{
+        //    List<TextBox> textBoxes = new List<TextBox>();
+        //    foreach (Control c in form.Controls)
+        //    {
+        //        if (c is TextBox)
+        //        {
+        //            textBoxes.Add(c as TextBox);
+        //        }
+        //    }
+        //    return textBoxes;
+        //}
 
-        //Creates a messagebox string for any empty textboxes
-        public static string getEmptyTextboxError(List<TextBox> textboxes)
-        {
-            string mbString = "";
-            List<string> errors = new List<string>();
-            //Uses lambda to shorten syntax of cycling through textboxes
-            textboxes.ForEach(t =>
-                            {
-                                 if (t.Text.ToString() == "")
-                                {
-                                    string e = "";
-                                    if (t.Name.ToString() == "nameInput") e = "Name";
-                                    if (t.Name.ToString() == "phoneInput") e = "Phone";
-                                    if (t.Name.ToString() == "addressInput") e = "Address";
-                                    if (t.Name.ToString() == "cityInput") e = "City";
-                                    if (t.Name.ToString() == "countryInput") e = "Country";
-                                    if (t.Name.ToString() == "zipInput") e = "Zip Code";
-                                    errors.Add(e);
-                                }
-                            }
-            );
-            if (errors.Count != 0)
-            {
-                //Uses lambda to shorten syntax of cycling through strings
-                errors.ForEach(s =>
-                            {
-                                mbString = mbString + $"{s} cannot be blank\n";   
-                            }
-                );
-            }
-            return mbString;
-        }
+        ////Creates a messagebox string for any empty textboxes
+        //public static string getEmptyTextboxError(List<TextBox> textboxes)
+        //{
+        //    string mbString = "";
+        //    List<string> errors = new List<string>();
+        //    //Uses lambda to shorten syntax of cycling through textboxes
+        //    textboxes.ForEach(t =>
+        //                    {
+        //                         if (t.Text.ToString() == "")
+        //                        {
+        //                            string e = "";
+        //                            if (t.Name.ToString() == "nameInput") e = "Name";
+        //                            if (t.Name.ToString() == "phoneInput") e = "Phone";
+        //                            if (t.Name.ToString() == "addressInput") e = "Address";
+        //                            if (t.Name.ToString() == "cityInput") e = "City";
+        //                            if (t.Name.ToString() == "countryInput") e = "Country";
+        //                            if (t.Name.ToString() == "zipInput") e = "Zip Code";
+        //                            errors.Add(e);
+        //                        }
+        //                    }
+        //    );
+        //    if (errors.Count != 0)
+        //    {
+        //        //Uses lambda to shorten syntax of cycling through strings
+        //        errors.ForEach(s =>
+        //                    {
+        //                        mbString = mbString + $"{s} cannot be blank\n";   
+        //                    }
+        //        );
+        //    }
+        //    return mbString;
+        //}
 
     }
 }

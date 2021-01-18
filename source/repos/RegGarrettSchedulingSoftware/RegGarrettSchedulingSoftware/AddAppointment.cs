@@ -70,11 +70,14 @@ namespace RegGarrettSchedulingSoftware
             {
                 DateTime start = startDatePicker.Value.Date.AddHours(startTimePicker.Value.Hour).AddMinutes(startTimePicker.Value.Minute);
                 DateTime end = endDatePicker.Value.Date.AddHours(endTimePicker.Value.Hour).AddMinutes(endTimePicker.Value.Minute);
-                List<DateTime> dates = new List<DateTime> { start, end, DateTime.Now };
+                DateTime startUtc = TimeZoneInfo.ConvertTimeToUtc(start);
+                DateTime endUtc = TimeZoneInfo.ConvertTimeToUtc(end);
+                DateTime nowUtc = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
+                List<DateTime> dates = new List<DateTime> { startUtc, endUtc, nowUtc };
                 int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
                 string type = typeInput.Text.ToString();
                 DB.newAppointment(id, type, dates);
-                //Refreshes dashboard appoinment view based on weekly/monthly
+                //Refreshes dashboard appointment view based on weekly/monthly
                 if (dash.weeklyChecked)
                 {
                     dash.populateWeek(dash.selection);

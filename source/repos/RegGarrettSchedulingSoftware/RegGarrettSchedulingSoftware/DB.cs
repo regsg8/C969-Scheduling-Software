@@ -145,7 +145,7 @@ namespace RegGarrettSchedulingSoftware
             List<string> formattedDates = formatDates(dates);
             try
             {
-                MySqlCommand updateAppt = new MySqlCommand($"UPDATE appointment SET customerId = '{custId}', type = '{type}', start = '{formattedDates[0]}', end = '{formattedDates[1]}', lastUpdateBy = '{Dashboard.userName}' WHERE appointmentId = '{apptId}'", conn);
+                MySqlCommand updateAppt = new MySqlCommand($"UPDATE appointment SET customerId = '{custId}', type = '{type}', start = '{formattedDates[0]}', end = '{formattedDates[1]}', lastUpdateBy = '{Dashboard.userName}', lastUpdate = '{formattedDates[2]}' WHERE appointmentId = '{apptId}'", conn);
                 updateAppt.ExecuteNonQuery();
             }
             catch (Exception x)
@@ -187,8 +187,8 @@ namespace RegGarrettSchedulingSoftware
 
         public static void addNewCustomer(string name, string phone, string address, string city, string country, string zip)
         {
-            List<DateTime> now = new List<DateTime> { DateTime.Now };
-            List<string> sqlDate = formatDates(now);
+            List<DateTime> nowUtc = new List<DateTime> { TimeZoneInfo.ConvertTimeToUtc(DateTime.Now) };
+            List<string> sqlDate = formatDates(nowUtc);
             try
             {
                 //Check if country is in db, if not insert new country, return countryId
@@ -247,11 +247,13 @@ namespace RegGarrettSchedulingSoftware
             int countryId = getCountryId(country);
             int cityId = getCityId(city, countryId);
             int addressId = getAddressId(address, phone, cityId, zip);
+            List<DateTime> nowUtc = new List<DateTime> { TimeZoneInfo.ConvertTimeToUtc(DateTime.Now) };
+            List<string> sqlDate = formatDates(nowUtc);
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
             try
             {
-                MySqlCommand updateCust = new MySqlCommand($"UPDATE customer SET customerName = '{name}', addressId = '{addressId}', lastUpdateBy = '{Dashboard.userName}' WHERE customerId = '{id}'", conn);
+                MySqlCommand updateCust = new MySqlCommand($"UPDATE customer SET customerName = '{name}', addressId = '{addressId}', lastUpdateBy = '{Dashboard.userName}', lastUpdate = '{sqlDate[0]}' WHERE customerId = '{id}'", conn);
                 updateCust.ExecuteNonQuery();
             }
             catch (Exception x)

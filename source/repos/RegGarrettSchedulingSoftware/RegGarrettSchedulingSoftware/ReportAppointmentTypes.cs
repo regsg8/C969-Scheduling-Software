@@ -12,8 +12,9 @@ namespace RegGarrettSchedulingSoftware
 {
     public partial class ReportAppointmentTypes : Form
     {
-        DataTable types = new DataTable();
-        DateTime selection;
+        private DataTable types = new DataTable();
+        private DataTable currentData = new DataTable();
+        private DateTime selection;
         public ReportAppointmentTypes()
         {
             InitializeComponent();
@@ -38,7 +39,9 @@ namespace RegGarrettSchedulingSoftware
             DateTime end = new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
             TimeSpan hours = new TimeSpan(23, 59, 59);
             end = end + hours;
-            List<DateTime> range = new List<DateTime> { start, end };
+            DateTime startUtc = TimeZoneInfo.ConvertTimeToUtc(start);
+            DateTime endUtc = TimeZoneInfo.ConvertTimeToUtc(end);
+            List<DateTime> range = new List<DateTime> { startUtc, endUtc };
             return range;
         }
 
@@ -80,8 +83,16 @@ namespace RegGarrettSchedulingSoftware
             {
                 DataRowView selected = typeCombo.SelectedItem as DataRowView;
                 string type = selected.Row[0].ToString();
-                dgv.DataSource = null;
-                dgv.DataSource = DB.getTypeAppts(type, getMonthRange(selection));
+                currentData = DB.getTypeAppts(type, getMonthRange(selection));
+                dgv.Rows.Clear();
+                for (int i = 0; i < currentData.Rows.Count; i++)
+                {
+                    string name = currentData.Rows[i][0].ToString();
+                    string typeAppt = currentData.Rows[i][1].ToString();
+                    DateTime start = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(currentData.Rows[i][2].ToString()), Dashboard.timeZone);
+                    DateTime end = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(currentData.Rows[i][3].ToString()), Dashboard.timeZone);
+                    dgv.Rows.Add(name, typeAppt, start, end);
+                }
             }
         }
 
@@ -95,7 +106,7 @@ namespace RegGarrettSchedulingSoftware
         //Triggers DataGridView update with selected type
         private void typeCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (dgv.DataSource != null)
+            if (dgv.Rows.Count != 0)
             {
                 refreshDGV();
             }

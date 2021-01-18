@@ -12,7 +12,8 @@ namespace RegGarrettSchedulingSoftware
 {
     public partial class ReportCustomerAppointments : Form
     {
-        DataTable customers = new DataTable();
+        private DataTable customers = new DataTable();
+        private DataTable currentData = new DataTable();
         public ReportCustomerAppointments()
         {
             InitializeComponent();
@@ -56,13 +57,22 @@ namespace RegGarrettSchedulingSoftware
             {
                 DataRowView selected = customerCombo.SelectedItem as DataRowView;
                 string id = selected.Row[0].ToString();
-                dgv.DataSource = DB.getCustomerAppts(int.Parse(id));
+                currentData = DB.getCustomerAppts(int.Parse(id));
+                dgv.Rows.Clear();
+                for (int i = 0; i < currentData.Rows.Count; i++)
+                {
+                    string name = currentData.Rows[i][0].ToString();
+                    string typeAppt = currentData.Rows[i][1].ToString();
+                    DateTime start = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(currentData.Rows[i][2].ToString()), Dashboard.timeZone);
+                    DateTime end = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(currentData.Rows[i][3].ToString()), Dashboard.timeZone);
+                    dgv.Rows.Add(name, typeAppt, start, end);
+                }
             }
         }
 
         private void customerCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (dgv.DataSource != null)
+            if (dgv.Rows.Count != 0)
             {
                 refreshDGV();
             }

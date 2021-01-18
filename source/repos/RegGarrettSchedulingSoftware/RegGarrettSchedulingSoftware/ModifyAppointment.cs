@@ -62,10 +62,16 @@ namespace RegGarrettSchedulingSoftware
                 }
             }
             typeInput.Text = appt.Rows[0][1].ToString();
-            startDatePicker.Value = Convert.ToDateTime(appt.Rows[0][2].ToString());
-            startTimePicker.Value = Convert.ToDateTime(appt.Rows[0][2].ToString());
-            endDatePicker.Value = Convert.ToDateTime(appt.Rows[0][3].ToString());
-            endTimePicker.Value = Convert.ToDateTime(appt.Rows[0][3].ToString());
+            DateTime start = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(appt.Rows[0][2]), Dashboard.timeZone);
+            DateTime end = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(appt.Rows[0][3]), Dashboard.timeZone);
+            startDatePicker.Value = start;
+            startTimePicker.Value = start;
+            endDatePicker.Value = end;
+            endTimePicker.Value = end;
+            //startDatePicker.Value = Convert.ToDateTime(appt.Rows[0][2].ToString());
+            //startTimePicker.Value = Convert.ToDateTime(appt.Rows[0][2].ToString());
+            //endDatePicker.Value = Convert.ToDateTime(appt.Rows[0][3].ToString());
+            //endTimePicker.Value = Convert.ToDateTime(appt.Rows[0][3].ToString());
             dgv.CurrentCell = dgv.Rows[custRow].Cells[0];
         }
 
@@ -79,11 +85,14 @@ namespace RegGarrettSchedulingSoftware
             {
                 DateTime start = startDatePicker.Value.Date.AddHours(startTimePicker.Value.Hour).AddMinutes(startTimePicker.Value.Minute);
                 DateTime end = endDatePicker.Value.Date.AddHours(endTimePicker.Value.Hour).AddMinutes(endTimePicker.Value.Minute);
-                List<DateTime> dates = new List<DateTime> { start, end };
+                DateTime startUtc = TimeZoneInfo.ConvertTimeToUtc(start);
+                DateTime endUtc = TimeZoneInfo.ConvertTimeToUtc(end);
+                DateTime nowUtc = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
+                List<DateTime> dates = new List<DateTime> { startUtc, endUtc, nowUtc };
                 int custId = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
                 string type = typeInput.Text.ToString();
                 DB.updateAppointment(currentId, custId, type, dates);
-                //Refreshes dashboard appoinment view based on weekly/monthly
+                //Refreshes dashboard appointment view based on weekly/monthly
                 if (dash.weeklyChecked)
                 {
                     dash.populateWeek(dash.selection);

@@ -53,8 +53,8 @@ namespace RegGarrettSchedulingSoftware
         {
             //Check to make sure all textbox fields have values
             List<TextBox> textboxes = new List<TextBox>();
-            textboxes = Dashboard.getTextBoxes(this);
-            string error = Dashboard.getEmptyTextboxError(textboxes);
+            textboxes = AddCustomer.getTextBoxes(this);
+            string error = AddCustomer.getEmptyTextboxError(textboxes);
             if (error != "")
             {
                 MessageBox.Show(error);
