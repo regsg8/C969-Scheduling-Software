@@ -74,6 +74,7 @@ namespace RegGarrettSchedulingSoftware
                 if (DB.checkOverlapping(formattedDates)) throw new Exception("Appointment time overlaps with existing appointment.");
                 if (!DB.insideBusinessHours(formattedDates)) throw new Exception("Appointment does not occur within local business hours.");
                 if (typeInput.Text.ToString() == "") throw new Exception("Please enter appointment type.");
+                if (dgv.Rows.Count == 0) throw new Exception("No available customers, please add a customer to create an appointment.");
                 int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
                 string type = typeInput.Text.ToString();
                 DB.newAppointment(id, type, dates);

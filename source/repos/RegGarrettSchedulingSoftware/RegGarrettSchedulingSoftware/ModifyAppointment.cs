@@ -68,10 +68,6 @@ namespace RegGarrettSchedulingSoftware
             startTimePicker.Value = start;
             endDatePicker.Value = end;
             endTimePicker.Value = end;
-            //startDatePicker.Value = Convert.ToDateTime(appt.Rows[0][2].ToString());
-            //startTimePicker.Value = Convert.ToDateTime(appt.Rows[0][2].ToString());
-            //endDatePicker.Value = Convert.ToDateTime(appt.Rows[0][3].ToString());
-            //endTimePicker.Value = Convert.ToDateTime(appt.Rows[0][3].ToString());
             dgv.CurrentCell = dgv.Rows[custRow].Cells[0];
         }
 

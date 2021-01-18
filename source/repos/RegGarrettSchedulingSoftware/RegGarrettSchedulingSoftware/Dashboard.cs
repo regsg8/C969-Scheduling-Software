@@ -208,15 +208,24 @@ namespace RegGarrettSchedulingSoftware
         //Opens confirmation dialog to delete selected appointment
         private void deleteAppt_Click(object sender, EventArgs e)
         {
-            string name = dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString();
-            DialogResult confirm = MessageBox.Show($"Are you sure you want to delete your appointment with {name}?", "Delete Confirmation", MessageBoxButtons.YesNo);
-            if (confirm == DialogResult.Yes)
+            try
             {
-                int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
-                DB.deleteAppointment(id);
-                refreshAppointments();
-                MessageBox.Show($"Appointment deleted.");
+                if (dgv.Rows.Count == 0) throw new Exception("No appointments to delete.");
+                string name = dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString();
+                DialogResult confirm = MessageBox.Show($"Are you sure you want to delete your appointment with {name}?", "Delete Confirmation", MessageBoxButtons.YesNo);
+                if (confirm == DialogResult.Yes)
+                {
+                    int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][5].ToString());
+                    DB.deleteAppointment(id);
+                    refreshAppointments();
+                    MessageBox.Show($"Appointment deleted.");
+                }
             }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
+            
         }
 
         //Opens a form for customer CRUD
@@ -229,17 +238,26 @@ namespace RegGarrettSchedulingSoftware
         //Pulls up dialog with selected customer data
         private void lookUpCustomer_Click(object sender, EventArgs e)
         {
-            int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][0].ToString());
-            DataTable data = new DataTable();
-            data = DB.getOneCustomer(id);
-            MessageBox.Show
-                (
-                    $"    Name:  {data.Rows[0][0]}\n" +
-                    $"   Phone:  {data.Rows[0][1]}\n"+
-                    $"Address:  {data.Rows[0][2]}\n" +
-                    $"        City:  {data.Rows[0][3]}\n"+
-                    $"Country:  {data.Rows[0][4]}"
-                );
+            try
+            {
+                if (dgv.Rows.Count == 0) throw new Exception("No available customers to look up.  Please add appointments.");
+                int id = int.Parse(currentData.Rows[dgv.CurrentCell.RowIndex][0].ToString());
+                DataTable data = new DataTable();
+                data = DB.getOneCustomer(id);
+                MessageBox.Show
+                    (
+                        $"    Name:  {data.Rows[0][0]}\n" +
+                        $"   Phone:  {data.Rows[0][1]}\n" +
+                        $"Address:  {data.Rows[0][2]}\n" +
+                        $"        City:  {data.Rows[0][3]}\n" +
+                        $"Country:  {data.Rows[0][4]}"
+                    );
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
+            
         }
 
 
