@@ -34,6 +34,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error logging in: " + x.Message);
+                MessageBox.Show("Error logging in.");
                 return "";
             }
             finally
@@ -61,7 +62,8 @@ namespace RegGarrettSchedulingSoftware
             }
             catch (Exception x)
             {
-                Console.WriteLine("Error fetching appointments: " + x.Message);
+                Console.WriteLine("Error getting appointments: " + x.Message);
+                MessageBox.Show("Error getting appointments.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -79,12 +81,15 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
+                if (checkOverlapping(formattedDates)) throw new Exception("Appointment overlaps with existing appointment.");
+                if (!insideBusinessHours(formattedDates)) throw new Exception("Appointment does not start within local business hours.");
                 MySqlCommand addAppt = new MySqlCommand($"INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{id}', '{Dashboard.userID}', 'not needed', 'not needed', 'not needed', 'not needed', '{type}', 'not needed', '{formattedDates[0]}', '{formattedDates[1]}', '{formattedDates[2]}', '{Dashboard.userName}', '{formattedDates[2]}', '{Dashboard.userName}')", conn);
                 addAppt.ExecuteNonQuery();
             }
             catch (Exception x)
             {
                 Console.WriteLine("Error adding appointment: " + x.Message);
+                MessageBox.Show("Error adding appointment: " + x.Message);
             }
             finally
             {
@@ -105,6 +110,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error deleting appointment: " + x.Message);
+                MessageBox.Show("Error deleting appointment.");
             }
             finally
             {
@@ -128,6 +134,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error getting appointment: " + x.Message);
+                MessageBox.Show("Error getting appointment.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -145,12 +152,15 @@ namespace RegGarrettSchedulingSoftware
             List<string> formattedDates = formatDates(dates);
             try
             {
+                if (checkOverlapping(formattedDates)) throw new Exception("Appointment time overlaps with existing appointment.");
+                if (!insideBusinessHours(formattedDates)) throw new Exception("Appointment does not occur within local business hours.");
                 MySqlCommand updateAppt = new MySqlCommand($"UPDATE appointment SET customerId = '{custId}', type = '{type}', start = '{formattedDates[0]}', end = '{formattedDates[1]}', lastUpdateBy = '{Dashboard.userName}', lastUpdate = '{formattedDates[2]}' WHERE appointmentId = '{apptId}'", conn);
                 updateAppt.ExecuteNonQuery();
             }
             catch (Exception x)
             {
                 Console.WriteLine("Error updating appointment: " + x.Message);
+                MessageBox.Show("Error updating appointment: " + x.Message);
             }
             finally
             {
@@ -175,7 +185,8 @@ namespace RegGarrettSchedulingSoftware
             }
             catch (Exception x)
             {
-                Console.WriteLine("Error fetching customers: " + x.Message);
+                Console.WriteLine("Error getting customers: " + x.Message);
+                MessageBox.Show("Error getting customers.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -232,6 +243,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error getting customer: " + x.Message);
+                MessageBox.Show("Error getting customer.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -259,6 +271,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error updating customer: " + x.Message);
+                MessageBox.Show("Error updating customer.");
             }
             finally
             {
@@ -279,6 +292,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error deleting customer: " + x.Message);
+                MessageBox.Show("Error deleting customer.");
             }
             finally
             {
@@ -304,6 +318,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error getting consultants: " + x.Message);
+                MessageBox.Show("Error getting consultants.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -329,6 +344,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error getting consultant's appointments: " + x.Message);
+                MessageBox.Show("Error getting consultant's appointments.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -354,6 +370,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error getting customer's appointments: " + x.Message);
+                MessageBox.Show("Error getting customer's appointments.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -379,6 +396,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error getting appointment types: " + x.Message);
+                MessageBox.Show("Error getting appointment types.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -405,6 +423,7 @@ namespace RegGarrettSchedulingSoftware
             catch (Exception x)
             {
                 Console.WriteLine("Error getting appointments by type: " + x.Message);
+                MessageBox.Show("Error getting appointments by type.");
                 DataTable noData = new DataTable();
                 return noData;
             }
@@ -534,6 +553,54 @@ namespace RegGarrettSchedulingSoftware
             {
                 conn.Close();
             }
+        }
+
+        //Checks for overlapping appointments
+        private static bool checkOverlapping(List<string> dates)
+        {
+            bool overlapping = true;
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId WHERE start BETWEEN '{dates[0]}' AND '{dates[1]}'", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                if (data.Rows.Count == 0)
+                {
+                    overlapping = false;
+                }
+                return overlapping;
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error getting overlapping appointments: " + x.Message);
+                return overlapping;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        //Checks for appointments within local business hours
+        private static bool insideBusinessHours(List<string> dates)
+        {
+            bool startInsideHours = false;
+            bool endInsideHours = false;
+            bool insideHours = false;
+            DateTime start = Convert.ToDateTime(dates[0]);
+            DateTime end = Convert.ToDateTime(dates[1]);
+            DateTime apptStart = TimeZoneInfo.ConvertTimeFromUtc(start, Dashboard.timeZone);
+            DateTime apptEnd = TimeZoneInfo.ConvertTimeFromUtc(end, Dashboard.timeZone);
+            DateTime now = DateTime.Now;
+            DateTime startBusiness = new DateTime(now.Year, now.Month, now.Day, 08, 00, 00);
+            DateTime endBusiness = new DateTime(now.Year, now.Month, now.Day, 17, 00, 00);
+            if (apptStart.Hour >= startBusiness.Hour && apptStart.Hour <= endBusiness.Hour) startInsideHours = true;
+            if (apptEnd.Hour >= startBusiness.Hour && apptStart.Hour <= endBusiness.Hour) endInsideHours = true;
+            if (startInsideHours && endInsideHours) insideHours = true;
+            return insideHours;
         }
         
     }

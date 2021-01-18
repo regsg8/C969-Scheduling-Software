@@ -67,15 +67,25 @@ namespace RegGarrettSchedulingSoftware
 
         private void deleteCustomer_Click(object sender, EventArgs e)
         {
+            int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
             string name = dgv.Rows[dgv.CurrentCell.RowIndex].Cells[1].Value.ToString();
-            DialogResult confirm = MessageBox.Show($"Are you sure you want to delete {name}?", "Delete Confirmation", MessageBoxButtons.YesNo);
-            if (confirm == DialogResult.Yes)
+            DataTable custAppts = new DataTable();
+            custAppts = DB.getCustomerAppts(id);
+            if (custAppts.Rows.Count > 0)
             {
-                int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
-                DB.deleteCustomer(id);
-                refreshDGV();
-                MessageBox.Show($"{name} deleted.");
+                MessageBox.Show($"{name} currently has appointments. You cannot delete {name} until all appointments with {name} have been deleted.");
             }
+            else
+            {
+                DialogResult confirm = MessageBox.Show($"Are you sure you want to delete {name}?", "Delete Confirmation", MessageBoxButtons.YesNo);
+                if (confirm == DialogResult.Yes)
+                {
+                    DB.deleteCustomer(id);
+                    refreshDGV();
+                    MessageBox.Show($"{name} deleted.");
+                }
+            }
+            
         }
 
         private void returnDashboard_Click(object sender, EventArgs e)

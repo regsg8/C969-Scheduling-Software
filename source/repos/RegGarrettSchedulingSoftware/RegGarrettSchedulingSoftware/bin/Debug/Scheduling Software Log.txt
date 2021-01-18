@@ -68,3 +68,7 @@ EVENT: Login  ||  USER: test  ||  TIME: 1/18/2021 11:15:46 AM
 EVENT: Login  ||  USER: test  ||  TIME: 1/18/2021 11:17:58 AM
 EVENT: Login  ||  USER: test  ||  TIME: 1/18/2021 11:19:15 AM
 EVENT: Login  ||  USER: test  ||  TIME: 1/18/2021 11:25:33 AM
+EVENT: Login  ||  USER: test  ||  TIME: 1/18/2021 12:31:36 PM
+EVENT: Login  ||  USER: test  ||  TIME: 1/18/2021 12:46:44 PM
+EVENT: Login  ||  USER: test  ||  TIME: 1/18/2021 7:52:00 PM
+EVENT: Login  ||  USER: test  ||  TIME(UTC): 1/18/2021 7:53:08 PM

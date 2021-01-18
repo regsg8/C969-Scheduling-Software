@@ -56,28 +56,34 @@ namespace RegGarrettSchedulingSoftware
         {
             string mbString = "";
             List<string> errors = new List<string>();
-            //Uses lambda to shorten syntax of cycling through textboxes
-            textboxes.ForEach(t =>
+            try
             {
-                if (t.Text.ToString() == "")
+                //Uses lambda to shorten syntax of cycling through textboxes
+                textboxes.ForEach(t =>
                 {
-                    string e = "";
-                    if (t.Name.ToString() == "nameInput") e = "Name";
-                    if (t.Name.ToString() == "phoneInput") e = "Phone";
-                    if (t.Name.ToString() == "addressInput") e = "Address";
-                    if (t.Name.ToString() == "cityInput") e = "City";
-                    if (t.Name.ToString() == "countryInput") e = "Country";
-                    if (t.Name.ToString() == "zipInput") e = "Zip Code";
-                    errors.Add(e);
+                    if (t.Text.ToString() == "")
+                    {
+                        string e = "";
+                        if (t.Name.ToString() == "nameInput") e = "Name";
+                        if (t.Name.ToString() == "phoneInput") e = "Phone";
+                        if (t.Name.ToString() == "addressInput") e = "Address";
+                        if (t.Name.ToString() == "cityInput") e = "City";
+                        if (t.Name.ToString() == "countryInput") e = "Country";
+                        if (t.Name.ToString() == "zipInput") e = "Zip Code";
+                        errors.Add(e);
+                    }
                 }
+                );
+                if (errors.Count != 0) throw new Exception("Input fields cannot be blank. Please fill out the following fields:\n");
             }
-            );
-            if (errors.Count != 0)
+                
+            catch (Exception e)
             {
+                mbString = e.Message;
                 //Uses lambda to shorten syntax of cycling through strings
                 errors.ForEach(s =>
                 {
-                    mbString = mbString + $"{s} cannot be blank\n";
+                    mbString = mbString + $"{s}\n";
                 }
                 );
             }

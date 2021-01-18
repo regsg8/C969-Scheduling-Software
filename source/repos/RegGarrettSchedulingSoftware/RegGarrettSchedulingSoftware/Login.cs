@@ -58,7 +58,7 @@ namespace RegGarrettSchedulingSoftware
                 {
                     using(StreamWriter w = File.AppendText(Path.Combine(Directory.GetCurrentDirectory(), "Scheduling Software Log.txt")))
                     {
-                        w.WriteLine($"EVENT: Login  ||  USER: {usernameInput.Text}  ||  TIME: {DateTime.Now}");
+                        w.WriteLine($"EVENT: Login  ||  USER: {usernameInput.Text}  ||  TIME(UTC): {TimeZoneInfo.ConvertTimeToUtc(DateTime.Now)}");
                     }
                     Dashboard dashboard = new Dashboard(id, usernameInput.Text.ToString());
                     dashboard.Show();

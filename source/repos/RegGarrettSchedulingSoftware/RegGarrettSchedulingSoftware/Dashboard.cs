@@ -277,52 +277,5 @@ namespace RegGarrettSchedulingSoftware
             Application.Exit();
         }
 
-        ////Gathers list of textboxes
-        //public static List<TextBox> getTextBoxes(Form form)
-        //{
-        //    List<TextBox> textBoxes = new List<TextBox>();
-        //    foreach (Control c in form.Controls)
-        //    {
-        //        if (c is TextBox)
-        //        {
-        //            textBoxes.Add(c as TextBox);
-        //        }
-        //    }
-        //    return textBoxes;
-        //}
-
-        ////Creates a messagebox string for any empty textboxes
-        //public static string getEmptyTextboxError(List<TextBox> textboxes)
-        //{
-        //    string mbString = "";
-        //    List<string> errors = new List<string>();
-        //    //Uses lambda to shorten syntax of cycling through textboxes
-        //    textboxes.ForEach(t =>
-        //                    {
-        //                         if (t.Text.ToString() == "")
-        //                        {
-        //                            string e = "";
-        //                            if (t.Name.ToString() == "nameInput") e = "Name";
-        //                            if (t.Name.ToString() == "phoneInput") e = "Phone";
-        //                            if (t.Name.ToString() == "addressInput") e = "Address";
-        //                            if (t.Name.ToString() == "cityInput") e = "City";
-        //                            if (t.Name.ToString() == "countryInput") e = "Country";
-        //                            if (t.Name.ToString() == "zipInput") e = "Zip Code";
-        //                            errors.Add(e);
-        //                        }
-        //                    }
-        //    );
-        //    if (errors.Count != 0)
-        //    {
-        //        //Uses lambda to shorten syntax of cycling through strings
-        //        errors.ForEach(s =>
-        //                    {
-        //                        mbString = mbString + $"{s} cannot be blank\n";   
-        //                    }
-        //        );
-        //    }
-        //    return mbString;
-        //}
-
     }
 }
