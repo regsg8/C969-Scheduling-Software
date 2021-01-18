@@ -62,11 +62,7 @@ namespace RegGarrettSchedulingSoftware
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            if (typeInput.Text.ToString() == "")
-            {
-                MessageBox.Show("Please enter appointment Type");
-            }
-            else
+            try
             {
                 DateTime start = startDatePicker.Value.Date.AddHours(startTimePicker.Value.Hour).AddMinutes(startTimePicker.Value.Minute);
                 DateTime end = endDatePicker.Value.Date.AddHours(endTimePicker.Value.Hour).AddMinutes(endTimePicker.Value.Minute);
@@ -74,6 +70,10 @@ namespace RegGarrettSchedulingSoftware
                 DateTime endUtc = TimeZoneInfo.ConvertTimeToUtc(end);
                 DateTime nowUtc = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
                 List<DateTime> dates = new List<DateTime> { startUtc, endUtc, nowUtc };
+                List<string> formattedDates = DB.formatDates(dates);
+                if (DB.checkOverlapping(formattedDates)) throw new Exception("Appointment time overlaps with existing appointment.");
+                if (!DB.insideBusinessHours(formattedDates)) throw new Exception("Appointment does not occur within local business hours.");
+                if (typeInput.Text.ToString() == "") throw new Exception("Please enter appointment type.");
                 int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
                 string type = typeInput.Text.ToString();
                 DB.newAppointment(id, type, dates);
@@ -88,6 +88,10 @@ namespace RegGarrettSchedulingSoftware
                 }
                 dash.populateWeek(DateTime.Now);
                 this.Close();
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
             }
         }
 

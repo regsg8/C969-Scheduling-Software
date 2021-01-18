@@ -54,7 +54,7 @@ namespace RegGarrettSchedulingSoftware
             try
             {
                 List<string> formattedDates = formatDates(dates);
-                MySqlCommand getAppt = new MySqlCommand($"SELECT c.customerId, c.customerName, a.type, a.start, a.end, a.appointmentId FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.start BETWEEN '{formattedDates[0]}' AND '{formattedDates[1]}'", conn);
+                MySqlCommand getAppt = new MySqlCommand($"SELECT c.customerId, c.customerName, a.type, a.start, a.end, a.appointmentId FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.start BETWEEN '{formattedDates[0]}' AND '{formattedDates[1]}' ORDER BY a.start, a.end, a.customerId", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -81,15 +81,15 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                if (checkOverlapping(formattedDates)) throw new Exception("Appointment overlaps with existing appointment.");
-                if (!insideBusinessHours(formattedDates)) throw new Exception("Appointment does not start within local business hours.");
+                //if (checkOverlapping(formattedDates)) throw new Exception("Appointment overlaps with existing appointment.");
+                //if (!insideBusinessHours(formattedDates)) throw new Exception("Appointment does not start within local business hours.");
                 MySqlCommand addAppt = new MySqlCommand($"INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{id}', '{Dashboard.userID}', 'not needed', 'not needed', 'not needed', 'not needed', '{type}', 'not needed', '{formattedDates[0]}', '{formattedDates[1]}', '{formattedDates[2]}', '{Dashboard.userName}', '{formattedDates[2]}', '{Dashboard.userName}')", conn);
                 addAppt.ExecuteNonQuery();
             }
             catch (Exception x)
             {
                 Console.WriteLine("Error adding appointment: " + x.Message);
-                MessageBox.Show("Error adding appointment: " + x.Message);
+                MessageBox.Show("Error adding appointment.");
             }
             finally
             {
@@ -152,15 +152,15 @@ namespace RegGarrettSchedulingSoftware
             List<string> formattedDates = formatDates(dates);
             try
             {
-                if (checkOverlapping(formattedDates)) throw new Exception("Appointment time overlaps with existing appointment.");
-                if (!insideBusinessHours(formattedDates)) throw new Exception("Appointment does not occur within local business hours.");
+                //if (checkOverlapping(formattedDates)) throw new Exception("Appointment time overlaps with existing appointment.");
+                //if (!insideBusinessHours(formattedDates)) throw new Exception("Appointment does not occur within local business hours.");
                 MySqlCommand updateAppt = new MySqlCommand($"UPDATE appointment SET customerId = '{custId}', type = '{type}', start = '{formattedDates[0]}', end = '{formattedDates[1]}', lastUpdateBy = '{Dashboard.userName}', lastUpdate = '{formattedDates[2]}' WHERE appointmentId = '{apptId}'", conn);
                 updateAppt.ExecuteNonQuery();
             }
             catch (Exception x)
             {
                 Console.WriteLine("Error updating appointment: " + x.Message);
-                MessageBox.Show("Error updating appointment: " + x.Message);
+                MessageBox.Show("Error updating appointment.");
             }
             finally
             {
@@ -177,7 +177,7 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                MySqlCommand getCust = new MySqlCommand("SELECT c.customerId, c.customerName, a.phone, a.address, ci.city, co.country FROM customer AS c INNER JOIN address AS a ON c.addressId = a.addressId INNER JOIN city AS ci ON a.cityId = ci.cityId INNER JOIN country AS co ON ci.countryId = co.countryId", conn);
+                MySqlCommand getCust = new MySqlCommand("SELECT c.customerId, c.customerName, a.phone, a.address, ci.city, co.country FROM customer AS c INNER JOIN address AS a ON c.addressId = a.addressId INNER JOIN city AS ci ON a.cityId = ci.cityId INNER JOIN country AS co ON ci.countryId = co.countryId ORDER BY c.customerId, c.customerName", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getCust);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -309,7 +309,7 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                MySqlCommand getCons = new MySqlCommand($"SELECT userId, userName FROM user", conn);
+                MySqlCommand getCons = new MySqlCommand($"SELECT userId, userName FROM user ORDER BY userName", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getCons);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -335,7 +335,7 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                MySqlCommand getAppts = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.userId = '{id}'", conn);
+                MySqlCommand getAppts = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.userId = '{id}' ORDER BY a.start, a.end, c.customerName", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -361,7 +361,7 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                MySqlCommand getAppts = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.customerId = '{id}'", conn);
+                MySqlCommand getAppts = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.customerId = '{id}' ORDER BY a.start, a.end, c.customerName", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -414,7 +414,7 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                MySqlCommand getAppts = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.type = '{type}' AND a.start BETWEEN '{formattedDates[0]}' AND '{formattedDates[1]}'", conn);
+                MySqlCommand getAppts = new MySqlCommand($"SELECT c.customerName, a.type, a.start, a.end FROM appointment AS a INNER JOIN customer AS c ON c.customerId = a.customerId AND a.type = '{type}' AND a.start BETWEEN '{formattedDates[0]}' AND '{formattedDates[1]}' ORDER BY a.start, a.end, c.customerName", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -436,7 +436,7 @@ namespace RegGarrettSchedulingSoftware
 
         //---HELPERS---//
         //Uses lambda to format any number of DateTime items into MySql format and returns them in a list of strings
-        private static List<string> formatDates(List<DateTime> dates)
+        public static List<string> formatDates(List<DateTime> dates)
         {
             List<string> formatted = new List<string>();
             dates.ForEach(d =>
@@ -556,14 +556,14 @@ namespace RegGarrettSchedulingSoftware
         }
 
         //Checks for overlapping appointments
-        private static bool checkOverlapping(List<string> dates)
+        public static bool checkOverlapping(List<string> dates)
         {
             bool overlapping = true;
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
             try
             {
-                MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId WHERE start BETWEEN '{dates[0]}' AND '{dates[1]}'", conn);
+                MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId FROM appointment WHERE start BETWEEN '{dates[0]}' AND '{dates[1]}'", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -585,7 +585,7 @@ namespace RegGarrettSchedulingSoftware
         }
 
         //Checks for appointments within local business hours
-        private static bool insideBusinessHours(List<string> dates)
+        public static bool insideBusinessHours(List<string> dates)
         {
             bool startInsideHours = false;
             bool endInsideHours = false;
