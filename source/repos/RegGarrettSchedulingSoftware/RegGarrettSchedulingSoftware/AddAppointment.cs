@@ -13,11 +13,13 @@ namespace RegGarrettSchedulingSoftware
     public partial class AddAppointment : Form
     {
         private Dashboard dash;
+        private DataTable consultants = new DataTable();
         public AddAppointment(Dashboard form)
         {
             InitializeComponent();
             formatCustomerDGV();
             formatDTPickers();
+            formatCombo();
             dash = form;
         }
 
@@ -50,6 +52,16 @@ namespace RegGarrettSchedulingSoftware
             setTimeValues();
         }
 
+        //Sets up combobox for selecting which consultant to add to the appointment
+        private void formatCombo()
+        {
+            consultants = DB.getConsultants();
+            consultantCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+            consultantCombo.DataSource = consultants;
+            consultantCombo.DisplayMember = consultants.Columns[1].ToString();
+            consultantCombo.ValueMember = consultants.Columns[0].ToString();
+        }
+
         //Rounds time values up by increments of 15
         private void setTimeValues()
         {
@@ -75,9 +87,11 @@ namespace RegGarrettSchedulingSoftware
                 if (!DB.insideBusinessHours(formattedDates)) throw new Exception("Appointment does not occur within local business hours.");
                 if (typeInput.Text.ToString() == "") throw new Exception("Please enter appointment type.");
                 if (dgv.Rows.Count == 0) throw new Exception("No available customers, please add a customer to create an appointment.");
-                int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
+                int customerId = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
+                DataRowView selected = consultantCombo.SelectedItem as DataRowView;
+                int consultantId = int.Parse(selected.Row[0].ToString());
                 string type = typeInput.Text.ToString();
-                DB.newAppointment(id, type, dates);
+                DB.newAppointment(consultantId, customerId, type, formattedDates);
                 //Refreshes dashboard appointment view based on weekly/monthly
                 if (dash.weeklyChecked)
                 {

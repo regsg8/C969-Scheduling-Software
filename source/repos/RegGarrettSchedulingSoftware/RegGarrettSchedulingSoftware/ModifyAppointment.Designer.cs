@@ -42,6 +42,8 @@ namespace RegGarrettSchedulingSoftware
             this.startTimePicker = new System.Windows.Forms.DateTimePicker();
             this.titleLabel = new System.Windows.Forms.Label();
             this.startDatePicker = new System.Windows.Forms.DateTimePicker();
+            this.label5 = new System.Windows.Forms.Label();
+            this.consultantCombo = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,7 +51,7 @@ namespace RegGarrettSchedulingSoftware
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(12, 118);
+            this.label4.Location = new System.Drawing.Point(12, 145);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(54, 13);
             this.label4.TabIndex = 29;
@@ -62,7 +64,7 @@ namespace RegGarrettSchedulingSoftware
             this.dgv.AllowUserToResizeColumns = false;
             this.dgv.AllowUserToResizeRows = false;
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv.Location = new System.Drawing.Point(72, 118);
+            this.dgv.Location = new System.Drawing.Point(72, 145);
             this.dgv.Name = "dgv";
             this.dgv.ReadOnly = true;
             this.dgv.RowHeadersVisible = false;
@@ -72,7 +74,7 @@ namespace RegGarrettSchedulingSoftware
             // cancelButton
             // 
             this.cancelButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelButton.Location = new System.Drawing.Point(278, 405);
+            this.cancelButton.Location = new System.Drawing.Point(278, 436);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(82, 23);
             this.cancelButton.TabIndex = 27;
@@ -83,7 +85,7 @@ namespace RegGarrettSchedulingSoftware
             // saveButton
             // 
             this.saveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveButton.Location = new System.Drawing.Point(190, 405);
+            this.saveButton.Location = new System.Drawing.Point(190, 436);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(82, 23);
             this.saveButton.TabIndex = 26;
@@ -166,11 +168,30 @@ namespace RegGarrettSchedulingSoftware
             this.startDatePicker.Size = new System.Drawing.Size(200, 20);
             this.startDatePicker.TabIndex = 17;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 118);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(60, 13);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "Consultant:";
+            // 
+            // consultantCombo
+            // 
+            this.consultantCombo.FormattingEnabled = true;
+            this.consultantCombo.Location = new System.Drawing.Point(72, 118);
+            this.consultantCombo.Name = "consultantCombo";
+            this.consultantCombo.Size = new System.Drawing.Size(121, 21);
+            this.consultantCombo.TabIndex = 30;
+            // 
             // ModifyAppointment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(533, 440);
+            this.ClientSize = new System.Drawing.Size(534, 481);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.consultantCombo);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dgv);
             this.Controls.Add(this.cancelButton);
@@ -186,7 +207,6 @@ namespace RegGarrettSchedulingSoftware
             this.Controls.Add(this.startDatePicker);
             this.Name = "ModifyAppointment";
             this.Text = "Scheduling Software";
-            this.LayoutMdi(System.Windows.Forms.MdiLayout.Cascade);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -207,5 +227,7 @@ namespace RegGarrettSchedulingSoftware
         private System.Windows.Forms.DateTimePicker startTimePicker;
         private System.Windows.Forms.Label titleLabel;
         private System.Windows.Forms.DateTimePicker startDatePicker;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox consultantCombo;
     }
 }

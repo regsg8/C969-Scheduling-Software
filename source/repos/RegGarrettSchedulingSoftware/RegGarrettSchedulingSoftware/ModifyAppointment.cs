@@ -13,6 +13,7 @@ namespace RegGarrettSchedulingSoftware
     public partial class ModifyAppointment : Form
     {
         Dashboard dash;
+        private DataTable consultants = new DataTable();
         private DataTable appt = new DataTable();
         private int currentId;
         public ModifyAppointment(int id, Dashboard form)
@@ -23,6 +24,7 @@ namespace RegGarrettSchedulingSoftware
             appt = DB.getOneAppointment(currentId);
             formatDTPickers();
             formatCustomerDGV();
+            formatCombo();
             populateAppt();
         }
 
@@ -51,6 +53,18 @@ namespace RegGarrettSchedulingSoftware
             endTimePicker.CustomFormat = "hh:mm tt";
             endTimePicker.ShowUpDown = true;
         }
+
+        //Sets up combobox for selecting which consultant to add to the appointment
+        private void formatCombo()
+        {
+            consultants = DB.getConsultants();
+            consultantCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+            consultantCombo.DataSource = consultants;
+            consultantCombo.DisplayMember = consultants.Columns[1].ToString();
+            consultantCombo.ValueMember = consultants.Columns[0].ToString();
+        }
+
+        //Populates all appointment information
         private void populateAppt()
         {
             int custRow = 0;
@@ -61,6 +75,17 @@ namespace RegGarrettSchedulingSoftware
                     custRow = i;
                 }
             }
+            int consultantIdIndex = 0;
+            int consultantId = int.Parse(appt.Rows[0][4].ToString());
+            for (int i = 0; i < consultantCombo.Items.Count; i++)
+            {
+                DataRowView indexedRow = consultantCombo.Items[i] as DataRowView;
+                int rowUserId = int.Parse(indexedRow.Row[0].ToString());
+                if (rowUserId == consultantId)
+                {
+                    consultantIdIndex = i;
+                }
+            }
             typeInput.Text = appt.Rows[0][1].ToString();
             DateTime start = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(appt.Rows[0][2]), Dashboard.timeZone);
             DateTime end = TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(appt.Rows[0][3]), Dashboard.timeZone);
@@ -69,6 +94,7 @@ namespace RegGarrettSchedulingSoftware
             endDatePicker.Value = end;
             endTimePicker.Value = end;
             dgv.CurrentCell = dgv.Rows[custRow].Cells[0];
+            consultantCombo.SelectedIndex = consultantIdIndex;
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -82,12 +108,14 @@ namespace RegGarrettSchedulingSoftware
                 DateTime nowUtc = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now);
                 List<DateTime> dates = new List<DateTime> { startUtc, endUtc, nowUtc };
                 List<string> formattedDates = DB.formatDates(dates);
-                if (DB.checkOverlapping(formattedDates)) throw new Exception("Appointment time overlaps with existing appointment.");
+                if (DB.checkOverlapping(formattedDates, currentId)) throw new Exception("Appointment time overlaps with existing appointment.");
                 if (!DB.insideBusinessHours(formattedDates)) throw new Exception("Appointment does not occur within local business hours.");
                 if (typeInput.Text.ToString() == "") throw new Exception("Please enter appointment type.");
-                int id = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
+                int custId = int.Parse(dgv.Rows[dgv.CurrentCell.RowIndex].Cells[0].Value.ToString());
+                DataRowView selected = consultantCombo.SelectedItem as DataRowView;
+                int consultantId = int.Parse(selected.Row[0].ToString());
                 string type = typeInput.Text.ToString();
-                DB.newAppointment(id, type, dates);
+                DB.updateAppointment(currentId, consultantId, custId, type, formattedDates);
                 //Refreshes dashboard appointment view based on weekly/monthly
                 if (dash.weeklyChecked)
                 {

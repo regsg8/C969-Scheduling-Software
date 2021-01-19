@@ -74,14 +74,13 @@ namespace RegGarrettSchedulingSoftware
         }
 
         //Adds a new appointment
-        public static void newAppointment(int id, string type, List<DateTime> dates)
+        public static void newAppointment(int consultantId, int customerId, string type, List<string> dates)
         {
-            List<string> formattedDates = formatDates(dates);
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
             try
             {
-                MySqlCommand addAppt = new MySqlCommand($"INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{id}', '{Dashboard.userID}', 'not needed', 'not needed', 'not needed', 'not needed', '{type}', 'not needed', '{formattedDates[0]}', '{formattedDates[1]}', '{formattedDates[2]}', '{Dashboard.userName}', '{formattedDates[2]}', '{Dashboard.userName}')", conn);
+                MySqlCommand addAppt = new MySqlCommand($"INSERT INTO appointment (customerId, userId, title, description, location, contact, type, url, start, end, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('{customerId}', '{consultantId}', 'not needed', 'not needed', 'not needed', 'not needed', '{type}', 'not needed', '{dates[0]}', '{dates[1]}', '{dates[2]}', '{Dashboard.userName}', '{dates[2]}', '{Dashboard.userName}')", conn);
                 addAppt.ExecuteNonQuery();
             }
             catch (Exception x)
@@ -123,7 +122,7 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                MySqlCommand getAppt = new MySqlCommand($"SELECT customerId, type, start, end FROM appointment WHERE appointmentId = '{id}'", conn);
+                MySqlCommand getAppt = new MySqlCommand($"SELECT customerId, type, start, end, userId FROM appointment WHERE appointmentId = '{id}'", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppt);
                 DataTable data = new DataTable();
                 sda.Fill(data);
@@ -143,14 +142,13 @@ namespace RegGarrettSchedulingSoftware
         }
 
         //Updates one appointment by id
-        public static void updateAppointment(int apptId, int custId, string type, List<DateTime> dates)
+        public static void updateAppointment(int apptId, int consultantId, int custId, string type, List<string> dates)
         {
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
-            List<string> formattedDates = formatDates(dates);
             try
             {
-                MySqlCommand updateAppt = new MySqlCommand($"UPDATE appointment SET customerId = '{custId}', type = '{type}', start = '{formattedDates[0]}', end = '{formattedDates[1]}', lastUpdateBy = '{Dashboard.userName}', lastUpdate = '{formattedDates[2]}' WHERE appointmentId = '{apptId}'", conn);
+                MySqlCommand updateAppt = new MySqlCommand($"UPDATE appointment SET customerId = '{custId}', userId = '{consultantId}', type = '{type}', start = '{dates[0]}', end = '{dates[1]}', lastUpdateBy = '{Dashboard.userName}', lastUpdate = '{dates[2]}' WHERE appointmentId = '{apptId}'", conn);
                 updateAppt.ExecuteNonQuery();
             }
             catch (Exception x)
@@ -551,7 +549,7 @@ namespace RegGarrettSchedulingSoftware
             }
         }
 
-        //Checks for overlapping appointments
+        //Checks for overlapping appointments for new appointments
         public static bool checkOverlapping(List<string> dates)
         {
             bool overlapping = true;
@@ -563,6 +561,45 @@ namespace RegGarrettSchedulingSoftware
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
                 DataTable data = new DataTable();
                 sda.Fill(data);
+                if (data.Rows.Count == 0)
+                {
+                    overlapping = false;
+                }
+                return overlapping;
+            }
+            catch (Exception x)
+            {
+                Console.WriteLine("Error getting overlapping appointments: " + x.Message);
+                return overlapping;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+        //Checks for overlapping appointments for updating appointments
+        public static bool checkOverlapping(List<string> dates, int apptId)
+        {
+            bool overlapping = true;
+            MySqlConnection conn = new MySqlConnection(sqlString);
+            conn.Open();
+            try
+            {
+                MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId FROM appointment WHERE start BETWEEN '{dates[0]}' AND '{dates[1]}'", conn);
+                MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
+                DataTable data = new DataTable();
+                sda.Fill(data);
+                if (data.Rows.Count != 0)
+                {
+                    //loop over to check for apptId, remove row if so
+                    for (int i = 0; i < data.Rows.Count; i++)
+                    {
+                        if(int.Parse(data.Rows[i][0].ToString()) == apptId)
+                        {
+                            data.Rows.RemoveAt(i);
+                        }
+                    }
+                }
                 if (data.Rows.Count == 0)
                 {
                     overlapping = false;
