@@ -11,7 +11,10 @@ namespace RegGarrettSchedulingSoftware
 {
     class DB
     {
-        public static string sqlString = "SERVER=wgudb.ucertify.com; DATABASE=U04qSi; Uid=U04qSi; Pwd=53688318875";
+        private static string server = "wgudb.ucertify.com";
+        private static string db = "U04qSi";
+        private static string dbPwd = "53688318875";
+        public static string sqlString = $"SERVER={server}; DATABASE={db}; Uid={db}; Pwd={dbPwd}";
 
         //Logs user in
         public static string login(string usr, string pwd)
