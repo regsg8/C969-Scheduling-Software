@@ -560,13 +560,32 @@ namespace RegGarrettSchedulingSoftware
             conn.Open();
             try
             {
-                MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId FROM appointment WHERE start BETWEEN '{dates[0]}' AND '{dates[1]}'", conn);
+                MySqlCommand getAppts = new MySqlCommand("SELECT appointmentId, start, end FROM appointment", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
                 DataTable data = new DataTable();
                 sda.Fill(data);
-                if (data.Rows.Count == 0)
+                DateTime apptStart = Convert.ToDateTime(dates[0]);
+                DateTime apptEnd = Convert.ToDateTime(dates[1]);
+                for (int i = 0; i < data.Rows.Count; i++)
                 {
-                    overlapping = false;
+                    DateTime start = Convert.ToDateTime(data.Rows[i][1]);
+                    DateTime end = Convert.ToDateTime(data.Rows[i][2]);
+                    int startApptStart = DateTime.Compare(start, apptStart);
+                    int startApptEnd = DateTime.Compare(start, apptEnd);
+                    int endApptStart = DateTime.Compare(end, apptStart);
+                    int endApptEnd = DateTime.Compare(end, apptEnd);
+                    if (startApptStart <= 0)
+                    {
+                        overlapping = (endApptStart <= 0) ? false : true;
+                    }
+                    else if (startApptStart > 0)
+                    {
+                        overlapping = (startApptEnd > 0) ? false : true;
+                    }
+                    else if (startApptStart > 0 && endApptEnd <= 0)
+                    {
+                        overlapping = true;
+                    }
                 }
                 return overlapping;
             }
@@ -583,29 +602,37 @@ namespace RegGarrettSchedulingSoftware
         //Checks for overlapping appointments for updating appointments
         public static bool checkOverlapping(List<string> dates, int apptId)
         {
-            bool overlapping = true;
+            bool overlapping = false;
             MySqlConnection conn = new MySqlConnection(sqlString);
             conn.Open();
             try
             {
-                MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId FROM appointment WHERE start BETWEEN '{dates[0]}' AND '{dates[1]}'", conn);
+                MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId, start, end FROM appointment WHERE appointmentId != '{apptId}'", conn);
                 MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
                 DataTable data = new DataTable();
                 sda.Fill(data);
-                if (data.Rows.Count != 0)
+                DateTime apptStart = Convert.ToDateTime(dates[0]);
+                DateTime apptEnd = Convert.ToDateTime(dates[1]);
+                for (int i = 0; i < data.Rows.Count; i++)
                 {
-                    //loop over to check for apptId, remove row if so
-                    for (int i = 0; i < data.Rows.Count; i++)
+                    DateTime start = Convert.ToDateTime(data.Rows[i][1]);
+                    DateTime end = Convert.ToDateTime(data.Rows[i][2]);
+                    int startApptStart = DateTime.Compare(start, apptStart);
+                    int startApptEnd = DateTime.Compare(start, apptEnd);
+                    int endApptStart = DateTime.Compare(end, apptStart);
+                    int endApptEnd = DateTime.Compare(end, apptEnd);
+                    if (startApptStart <= 0)
                     {
-                        if(int.Parse(data.Rows[i][0].ToString()) == apptId)
-                        {
-                            data.Rows.RemoveAt(i);
-                        }
+                        overlapping = (endApptStart <= 0) ? false : true;
                     }
-                }
-                if (data.Rows.Count == 0)
-                {
-                    overlapping = false;
+                    else if (startApptStart > 0 )
+                    {
+                        overlapping = (startApptEnd > 0) ? false : true;
+                    }
+                    else if (startApptStart > 0 && endApptEnd <= 0)
+                    {
+                        overlapping = true;
+                    }
                 }
                 return overlapping;
             }
@@ -633,11 +660,98 @@ namespace RegGarrettSchedulingSoftware
             DateTime now = DateTime.Now;
             DateTime startBusiness = new DateTime(now.Year, now.Month, now.Day, 08, 00, 00);
             DateTime endBusiness = new DateTime(now.Year, now.Month, now.Day, 17, 00, 00);
-            if (apptStart.Hour >= startBusiness.Hour && apptStart.Hour <= endBusiness.Hour) startInsideHours = true;
-            if (apptEnd.Hour >= startBusiness.Hour && apptStart.Hour <= endBusiness.Hour) endInsideHours = true;
+            if (apptStart.Hour >= startBusiness.Hour && apptStart.Hour < endBusiness.Hour) startInsideHours = true;
+            if (apptEnd.Hour > startBusiness.Hour && apptEnd.Hour <= endBusiness.Hour) endInsideHours = true;
             if (startInsideHours && endInsideHours) insideHours = true;
             return insideHours;
         }
-        
+
+        ////Checks for overlapping appointments for new appointments
+        //public static bool checkOverlapping(List<string> dates)
+        //{
+        //    bool overlapping = true;
+        //    MySqlConnection conn = new MySqlConnection(sqlString);
+        //    conn.Open();
+        //    try
+        //    {
+        //        MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId FROM appointment WHERE start BETWEEN '{dates[0]}' AND '{dates[1]}'", conn);
+        //        MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
+        //        DataTable data = new DataTable();
+        //        sda.Fill(data);
+        //        if (data.Rows.Count == 0)
+        //        {
+        //            overlapping = false;
+        //        }
+        //        return overlapping;
+        //    }
+        //    catch (Exception x)
+        //    {
+        //        Console.WriteLine("Error getting overlapping appointments: " + x.Message);
+        //        return overlapping;
+        //    }
+        //    finally
+        //    {
+        //        conn.Close();
+        //    }
+        //}
+        ////Checks for overlapping appointments for updating appointments
+        //public static bool checkOverlapping(List<string> dates, int apptId)
+        //{
+        //    bool overlapping = true;
+        //    MySqlConnection conn = new MySqlConnection(sqlString);
+        //    conn.Open();
+        //    try
+        //    {
+        //        MySqlCommand getAppts = new MySqlCommand($"SELECT appointmentId FROM appointment WHERE start BETWEEN '{dates[0]}' AND '{dates[1]}'", conn);
+        //        MySqlDataAdapter sda = new MySqlDataAdapter(getAppts);
+        //        DataTable data = new DataTable();
+        //        sda.Fill(data);
+        //        if (data.Rows.Count != 0)
+        //        {
+        //            //loop over to check for apptId, remove row if so
+        //            for (int i = 0; i < data.Rows.Count; i++)
+        //            {
+        //                if(int.Parse(data.Rows[i][0].ToString()) == apptId)
+        //                {
+        //                    data.Rows.RemoveAt(i);
+        //                }
+        //            }
+        //        }
+        //        if (data.Rows.Count == 0)
+        //        {
+        //            overlapping = false;
+        //        }
+        //        return overlapping;
+        //    }
+        //    catch (Exception x)
+        //    {
+        //        Console.WriteLine("Error getting overlapping appointments: " + x.Message);
+        //        return overlapping;
+        //    }
+        //    finally
+        //    {
+        //        conn.Close();
+        //    }
+        //}
+
+        ////Checks for appointments within local business hours
+        //public static bool insideBusinessHours(List<string> dates)
+        //{
+        //    bool startInsideHours = false;
+        //    bool endInsideHours = false;
+        //    bool insideHours = false;
+        //    DateTime start = Convert.ToDateTime(dates[0]);
+        //    DateTime end = Convert.ToDateTime(dates[1]);
+        //    DateTime apptStart = TimeZoneInfo.ConvertTimeFromUtc(start, Dashboard.timeZone);
+        //    DateTime apptEnd = TimeZoneInfo.ConvertTimeFromUtc(end, Dashboard.timeZone);
+        //    DateTime now = DateTime.Now;
+        //    DateTime startBusiness = new DateTime(now.Year, now.Month, now.Day, 08, 00, 00);
+        //    DateTime endBusiness = new DateTime(now.Year, now.Month, now.Day, 17, 00, 00);
+        //    if (apptStart.Hour >= startBusiness.Hour && apptStart.Hour <= endBusiness.Hour) startInsideHours = true;
+        //    if (apptEnd.Hour >= startBusiness.Hour && apptStart.Hour <= endBusiness.Hour) endInsideHours = true;
+        //    if (startInsideHours && endInsideHours) insideHours = true;
+        //    return insideHours;
+        //}
+
     }
 }
